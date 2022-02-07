@@ -5,8 +5,9 @@ import os
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Kokoshnik45@localhost/catering.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost/catering'
+
+
 db = SQLAlchemy(app)
 
 app.config['SECRET_KEY'] = 'zybrzubryachestiy'
@@ -15,7 +16,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 class Products(db.Model):
-    _tablename_ = 'products'
+
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), primary_key=False)
     price = db.Column(db.Integer )
@@ -38,7 +39,7 @@ class Users(db.Model):
 
 
 
-
+db.create_all()
 
 @app.route('/')
 def indexpage():  # put application's code here
