@@ -5,9 +5,7 @@ import os
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost/catering'
-
-
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Kokoshnik45@localhost/catering'
 db = SQLAlchemy(app)
 
 app.config['SECRET_KEY'] = 'zybrzubryachestiy'
@@ -38,8 +36,9 @@ class Users(db.Model):
         return f"<users {self.id}>"
 
 
-
 db.create_all()
+
+
 
 @app.route('/')
 def indexpage():  # put application's code here
