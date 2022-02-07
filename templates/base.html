@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ url_for ('static', filename = 'css/my.css')}}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="icon" href="/docs/5.1/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/docs/5.1/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
+<link rel="manifest" href="/docs/5.1/assets/img/favicons/manifest.json">
+<link rel="mask-icon" href="/docs/5.1/assets/img/favicons/safari-pinned-tab.svg" color="#7952b3">
+<link rel="icon" href="/docs/5.1/assets/img/favicons/favicon.ico">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.topnav {
+
+  overflow: hidden;
+  background-color: white;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: lightgray;
+  color: black;
+}
+
+.topnav a.active {
+
+  color: black;
+}
+
+.topnav .icon {
+  display: none;
+}
+
+@media screen and (max-width: 600px) {
+  .topnav a:not(:first-child) {display: none;}
+  .topnav a.icon {
+    float: right;
+    display: block;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .topnav.responsive {position: relative;}
+  .topnav.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+}
+body {
+  margin: 0;
+  font-family: "Lato", sans-serif;
+}
+
+.sidebar {
+  margin: 0;
+  padding: 0;
+  width: 15%;
+  background-color: #f1f1f1;
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+}
+
+/* Sidebar links */
+.sidebar a {
+  display: block;
+  color: black;
+  padding: 16px;
+  text-decoration: none;
+}
+
+/* Active/current link */
+.sidebar a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+/* Links on mouse-over */
+.sidebar a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+}
+
+/* Page content. The value of the margin-left property should match the value of the sidebar's width property */
+div.content {
+  margin-left: 200px;
+  padding: 1px 16px;
+  height: 1000px;
+}
+
+/* On screens that are less than 700px wide, make the sidebar into a topbar */
+@media screen and (max-width: 700px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  .sidebar a {float: left;}
+  div.content {margin-left: 0;}
+}
+
+/* On screens that are less than 400px, display the bar vertically, instead of horizontally */
+@media screen and (max-width: 400px) {
+  .sidebar a {
+    text-align: center;
+    float: none;
+  }
+}
+.wrapper{
+    align-items: stretch;
+}
+#myInput {
+
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
+#myTable {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+#myTable th, #myTable td {
+  text-align: left;
+  padding: 12px;
+}
+
+#myTable tr {
+  border-bottom: 1px solid #ddd;
+}
+
+#myTable tr.header, #myTable tr:hover {
+  background-color: #f1f1f1;
+}
+</style>
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <title>{% block title%}{% endblock %}</title>
+<body>
+
+<div class="container"  >
+<div class="d-flex flex-column flex-md-row align-items-center pb-3 mb-4 border-bottom " >
+      <a href="/" class="d-flex align-items-center text-light text-decoration-none">
+          <img  src = "/static/logobright.png" height="150px">
+
+
+      </a>
+
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="container">
+<div class="topnav" id="myTopnav" >
+  <a href="/" class="active">Our service</a>
+  <a href="/menus">Our menus</a>
+
+    <a href="/shop">Create</a>
+    <a href="/signup">Sign Up</a>
+  <a href="/contact">Contact</a>
+  <a href="/about">About us</a>
+    {% if session['user']== "Olena Byelousova" %}
+    <a href="/addproduct">Add product</a>
+     <a href="/feedback">Feedback</a>
+
+     {% endif %}
+    {% if session['user']!= None and session['user']!= "Olena Byelousova" %}
+    <a href="/about">{{ session['user'] }}</a>
+     <a href="/logout">Logout</a>
+     {% endif %}
+
+     <a class = "iLoveMyBasket" href = "/shoppingcard"><i class="fa fa-shopping-basket" style="font-size:25px;color:black; position: relative; padding-top: 0px; padding-left: 0px;" ></i></a>
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div>
+    </div>
+<script>
+function myFunction() {
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
+}
+</script>
+    </div>
+</div>
+
+    <div class = "container">
+<div class="wrapper">
+
+<div class="sidebar">
+
+              <a href="Dashboard"><i class="fa fa-fw fa-home"></i>  Dashboard</a>
+  <a href="#Orders"><i class="fa fa-fw fa-bell"> </i>  Orders</a>
+  <a href="#Payments"><i class="fa fa-fw fa-money"> </i>  Payments</a>
+    <a href="#Calendar"><i class="fa fa-fw fa-calendar"></i>  Calendar</a>
+  <a href="/customersadmin"><i class="fa fa-fw fa-user"></i>  Clients</a>
+  <a href="/productsadmin"><i class="fa fa-fw fa-database"></i>  Products</a>
+
+  <a href="#Feedback"><i class="fa fa-fw fa-envelope"></i>  Feedback</a>
+    <a href="#Send NewsLetter"><i class="fa fa-fw fa-at"></i>  Send NewsLetter</a>
+</div>
+    </div>
+    </div>
+
+</div>
+{% block body%}{% endblock %}

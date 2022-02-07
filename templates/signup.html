@@ -1,0 +1,67 @@
+{% extends "basecustomer.html" %}
+
+{% block title%}
+Contact
+{% endblock %}
+
+{% block body%}
+ <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+<div class="container col-xxl-8 px-4 py-5">
+    <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+      <div class="col-md-10 mx-auto col-lg-5">
+        <form class="p-4 p-md-5 border rounded-3 bg-light" method ="POST" >
+          <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="floatingEmail" name="email" placeholder="name@example.com">
+            <label for="floatingEmail">Email address</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">
+            <label for="floatingPassword">Password</label>
+          </div>
+          <div class="checkbox mb-3">
+            <label>
+              <input type="checkbox" value="remember-me"> Remember me
+            </label>
+          </div>
+          <button class="w-100 btn btn-lg btn-danger" type="submit">Sign up</button>
+          <hr class="my-4">
+          <small class="text-muted">By clicking Sign up, you agree to the terms of use.</small>
+          <br>
+          <small class="text-muted">Don't have an account? <a href ="/register">Register here.</a></small>
+
+        </form>
+      </div>
+
+      <div class="col-lg-6">
+        <h1 class="display-5 fw-bold lh-1 mb-3">Sign-up or register</h1>
+        <p class="lead">Get 5% discount by making order via our web-page</p>
+
+
+        <p class="lead">For new customers only - Get additional 5% new customer welcome discount by registering on our web-site. </p>
+        <p class="col-lg-10 fs-4"><image class="rounded mx-auto d-block" style ="width: 100%"  alt="..."  src = "/static/images/young-handsome-chef-holding-uncooked-crayfish-isolated_273609-48233.jpg"></image>
+            </p>
+
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}

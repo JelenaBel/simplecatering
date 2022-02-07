@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title%}
+Menus
+{% endblock %}
+
+{% block body%}
+    <style>
+
+* {
+  box-sizing: border-box;
+}
+</style>
+     <style>
+
+* {
+  box-sizing: border-box;
+}
+
+#myInput {
+
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 20px 12px 20px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
+#myTable {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+#myTable th, #myTable td {
+  text-align: left;
+  padding: 12px;
+}
+
+#myTable tr {
+  border-bottom: 1px solid #ddd;
+}
+
+#myTable tr.header, #myTable tr:hover {
+  background-color: #f1f1f1;
+}
+</style>
+    <body>
+
+
+<div class="col-lg-10 col-md-12 mx-auto">
+
+<div class="content">
+    <div class = "container">
+
+
+
+<h3>My Products</h3>  <a href="/addproduct" style = "color:grey; padding:5px" >Add new product</a>
+
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+
+<table class ="table-responsive" id="myTable" style ="width: auto">
+  <tr class="header">
+     <th>Category</th>
+      <th>Product ID</th>
+    <th >Name</th>
+      <th >Picture</th>
+      <th >Price</th>
+      <th>Description</th>
+      <th>Change</th>
+  </tr>
+    {%  for el in products %}
+  <tr>
+      <td>{{ el.category }}</td>
+    <td>{{ el.id }}</td>
+    <td>{{ el.title }}</td>
+      <td><img class="img-thumbnail" style ="width:70px" alt="..."   src = "/static/images/{{el.photo}}"/></td>
+      <td>{{ el.price }}€ /per person</td>
+      <td> {{ el.description }}</td>
+      <td> Update</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<script>
+function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+</script>
+
+</div>
+</div>
+</div>
+    </body>
+
+{% endblock %}
