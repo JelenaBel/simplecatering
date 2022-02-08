@@ -1,1 +1,1 @@
-web: gunicorn app:simplecatering
+web: gunicorn app:app
