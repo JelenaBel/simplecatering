@@ -84,50 +84,45 @@ def productsadmin():
 
     return render_template("productsadmin.html", products=products)
 
-@app.route('/productsadmin/<int:id>/delete')
-def deleteproduct(id):
-    product = Products.query.get_or_404(id);
+@app.route('/customersadmin/<int:id>/delete')
+def deletecustomer(id):
+    user = Users.query.get_or_404(id);
 
     try:
-        db.session.delete(product)
+        db.session.delete(user)
         db.session.commit()
-        return redirect ("/productsadmin")
+        return redirect ("/customersadmin")
     except:
         return ("An error occurred while deleting the product")
 
-        return redirect  ("/productsadmin")
+        return redirect  ("/customersadmin")
 
 
-@app.route('/productsadmin/<int:id>/update', methods=['POST', 'GET'])
-def updateproduct(id):
-    product = Products.query.get(id)
+@app.route('/customersadmin/<int:id>/update', methods=['POST', 'GET'])
+def updateuser(id):
+    user = Users.query.get(id)
     if request.method == "POST":
-        product.id = id
-        product.title = request.form['productname']
-        product.price = request.form['productprice']
-        product.category = request.form['category']
-        product.description = request.form['subject']
-        file = request.files['filename']
-
-
-        if file and file.filename:
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
-
-        product.photo = file.filename
+        user.id = id
+        user.name = request.form['name']
+        user.email = request.form['email']
+        if request.form['password'] == request.form['passwordRepeat']:
+            user.password = request.form['password']
 
 
         try:
 
             db.session.commit()
-            return redirect('/productsadmin')
+            return redirect('/customersadmin')
 
         except:
-            print("При добавлении товара произошла ошибка")
+            print("При редактировании account произошла ошибка")
 
-            return "При редактировании товара произошла ошибка"
+            return "При редактировании account произошла ошибка"
 
     else:
-        return render_template("productupdate.html", product=product)
+        return render_template("customersupdate.html", user=user)
+
+
 
 
 @app.route('/customersadmin')

@@ -1,0 +1,71 @@
+{% extends "basecustomer.html" %}
+
+{% block title%}
+Update user account
+{% endblock %}
+
+{% block body%}
+ <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+<div class="container col-xxl-8 px-4 py-5">
+    <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+      <div class="col-md-10 mx-auto col-lg-5">
+        <form class="p-4 p-md-5 border rounded-3 bg-light"  method = "POST">
+            <div class="form-floating mb-3">
+            <input type="name" class="form-control" id="floatingInputName" name="name" value = {{ user.name }} placeholder="name">
+            <label for="floatingInputName">Name</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="floatingInputEmail" name="email" value = {{ user.email }} placeholder="name@example.com">
+            <label for="floatingInputEmail">Email address</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="password" class="form-control" id="floatingPassword" name="password"  value = {{ user.password }}placeholder="Password">
+            <label for="floatingPassword">Password</label>
+          </div>
+            <div class="form-floating mb-3">
+            <input type="password" class="form-control" id="floatingPassword2" name ="passwordRepeat" placeholder="Repeat password">
+            <label for="floatingPassword">Repeat password</label>
+          </div>
+
+          <button class="w-100 btn btn-lg btn-primary" type="submit">Update user account</button>
+          <hr class="my-4">
+          <small class="text-muted">By clicking Register, you agree to the terms of use.</small>
+          <br>
+          <small class="text-muted">Now you may  <a href ="/signup">Sign In.</a></small>
+
+        </form>
+      </div>
+
+      <div class="col-lg-6">
+        <h1 class="display-5 fw-bold lh-1 mb-3">Sign-up or register</h1>
+        <p class="lead">Get 5% discount by making order via our web-page</p>
+
+
+        <p class="lead">For new customers only - Get additional 5% new customer welcome discount by registering on our web-site. </p>
+        <p class="col-lg-10 fs-4"><image class="rounded mx-auto d-block" style ="width: 100%"  alt="..."  src = "/static/ten_percent_off.jpg"></image>
+            </p>
+
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}
