@@ -84,12 +84,58 @@ def productsadmin():
 
     return render_template("productsadmin.html", products=products)
 
+@app.route('/productsadmin/<int:id>/delete')
+def deleteproduct(id):
+    product = Products.query.get_or_404(id);
+
+    try:
+        db.session.delete(product)
+        db.session.commit()
+        return redirect ("/productsadmin")
+    except:
+        return ("An error occurred while deleting the product")
+
+        return redirect  ("/productsadmin")
+
+
+@app.route('/productsadmin/<int:id>/update', methods=['POST', 'GET'])
+def updateproduct(id):
+    product = Products.query.get(id)
+    if request.method == "POST":
+        product.id = id
+        product.title = request.form['productname']
+        product.price = request.form['productprice']
+        product.category = request.form['category']
+        product.description = request.form['subject']
+        file = request.files['filename']
+
+
+        if file and file.filename:
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
+
+        product.photo = file.filename
+
+
+        try:
+
+            db.session.commit()
+            return redirect('/productsadmin')
+
+        except:
+            print("При добавлении товара произошла ошибка")
+
+            return "При редактировании товара произошла ошибка"
+
+    else:
+        return render_template("productupdate.html", product=product)
+
 
 @app.route('/customersadmin')
 def customerssadmin():
     users = Users.query.all();
 
     return render_template("customersadmin.html", users=users)
+
 
 @app.route('/addproduct', methods=['POST', 'GET'])
 def addproduct():
