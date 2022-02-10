@@ -5,12 +5,34 @@ Contact
 {% endblock %}
 
 {% block body%}
-    <div class="col-lg-10 col-md-12 mx-auto">
 
-<span> Username:  </span><span>{{  session['user']}} </span><p></p>
+   <div class="container col-xxl-8 px-4 py-5">
+    <div class="row flex-lg align-items-center g-5 py-5">
+      <div class="col-md-10 mx-auto col-lg-5">
+     <img class="img-fluid" style ="width:300px" alt="..."   src = "/static/images/user-icon-human-person-sign-vector-20444565.jpg"/>
+ </div>
+     <div class="col-lg-6">
+        <h8 class="display-5 fw-bold lh-1 mb-3">Your user account</h8>
+         <br>
+         <br>
+         <table class ="table-responsive-lg" style = "font-size: 18px">
+             <tr>
+                 <th style = "font-size: 18px; padding: 10px">User name:</th><td>{{  session['user']}} </td>
+             </tr>
+             <tr>
+                 <th style = "font-size: 18px; padding: 10px"> Your e-mail:</th><td> {{ session['user_email'] }} </td>
+             </tr>
 
-<span> User e-mail</span> <p> {{ session['user_email'] }}</p>
 
+         </table>
+         <br>
+
+
+
+     <a href = "/aboutuser/{{session['user_id']}}/update" class="w-100 btn btn-lg btn-primary" style = "font-size:14px; max-width: 200px" >Update user account</a>
+    </div>
+    </div>
+   </div>
     </div>
 
 {% endblock %}

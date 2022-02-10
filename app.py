@@ -168,9 +168,32 @@ def updateuser(id):
             return "При редактировании account произошла ошибка"
 
     else:
-        return render_template("customersupdate.html", user=user)
+        return render_template("customersadminupdate.html", user=user)
 
 
+@app.route('/aboutuser/<int:id>/update', methods=['POST', 'GET'])
+def updateuseritself(id):
+    user = Users.query.get(id)
+    if request.method == "POST":
+        user.id = id
+        user.name = request.form['name']
+        user.email = request.form['email']
+        if request.form['password'] == request.form['passwordRepeat']:
+            user.password = request.form['password']
+
+
+        try:
+
+            db.session.commit()
+            return redirect('/aboutuser')
+
+        except:
+            print("При редактировании account произошла ошибка")
+
+            return "При редактировании account произошла ошибка"
+
+    else:
+        return render_template("customersadminupdate.html", user=user)
 
 
 @app.route('/customersadmin')
@@ -239,8 +262,10 @@ def signup():
             if user.password == password:
                 session['user'] = user.name
                 session['user_email'] = user.email
+                session['user_id'] = user.id
                 print(session['user'])
                 print(session['user_email'])
+                print(session['user_id'])
                 flash('You were successfully logged in')
 
                 render_template("index.html")
