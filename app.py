@@ -77,6 +77,7 @@ db.create_all()
 
 
 @app.route('/')
+@app.route('/index')
 def indexpage():  # put application's code here
     return render_template("index.html")
 
