@@ -72,6 +72,7 @@ class Reply(db.Model):
     def __repr__(self):
         return f"<reply {self.id}>"
 
+
 db.create_all()
 
 
