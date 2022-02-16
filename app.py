@@ -437,7 +437,7 @@ def register():
 
 def sending_email(name, email):
     msg = Message('Hello from the other side!', sender='obyelousova@gmail.com', recipients=[email])
-    msg.body = "Hey,"+name+" you are successfully registered on Simple Catering."
+    msg.body = "Hey, "+name+"! You are successfully registered on Simple Catering."
     mail.send(msg)
     return "Message sent!"
 
