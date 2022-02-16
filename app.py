@@ -306,6 +306,8 @@ def reply_feedback(id):
         feedback_id = id
         subject = request.form['subject']
         message = request.form['message']
+        publicity = "No"
+        reply =  "No"
 
 
         try:
@@ -387,8 +389,7 @@ def signup():
         if email and password:
 
             user = Users.query.filter_by(email=email).first()
-            print(user.name)
-            print(user.email)
+
             if user.password == password:
                 session['user'] = user.name
                 session['user_email'] = user.email
@@ -436,7 +437,7 @@ def register():
 
 
 def sending_email(name, email):
-    msg = Message('Hello from the other side!', sender='obyelousova@gmail.com', recipients=[email])
+    msg = Message('Hello from the other side!', sender='taide.catering@gmail.com', recipients=[email])
     msg.body = "Hey, "+name+"! You are successfully registered on Simple Catering."
     mail.send(msg)
     return "Message sent!"
