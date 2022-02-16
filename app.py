@@ -64,7 +64,7 @@ class Feedback(db.Model):
 
 class Reply(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    feedback_id = db.Column(db.Integer(), db.ForeignKey('feedback.id'))
+    feedback_id = db.Column(db.Integer(), nullable=False)
     subject = db.Column(db.VARCHAR(200), nullable=False)
     message = db.Column(db.VARCHAR(1000), nullable=False)
     updatetime = db.Column(db.Date, default=datetime.utcnow)
@@ -74,7 +74,6 @@ class Reply(db.Model):
 
 
 db.create_all()
-
 
 @app.route('/')
 @app.route('/index')
@@ -244,8 +243,6 @@ def updateuser(id):
 
 
 @app.route('/aboutuser/<int:id>/update', methods=['POST', 'GET'])
-
-
 def updateuseritself(id):
     user = Users.query.get(id)
     if request.method == "POST":
@@ -314,7 +311,12 @@ def reply_feedback(id):
         try:
             sending_reply_customerfeedback(customeremail, subject, message)
             reply = Reply(id=idreply, feedback_id=feedback_id, subject=subject, message=message)
-            db.session.commit(reply)
+            print (idreply)
+            print(feedback_id)
+            print(subject)
+            print(message)
+            db.session.add(reply)
+            db.session.commit()
             return redirect('/feedbacksadmin')
 
         except:
@@ -419,8 +421,9 @@ def register():
         if request.form['password'] == request.form['passwordRepeat']:
             password = request.form['password']
             numberid = random.randint(10000, 99999)
-            print(numberid)
-            user = Users(id=numberid, name=name, email=email, password=password)
+            date = datetime.utcnow()
+            print(date)
+            user = Users(id=numberid, name=name, email=email, password=password, updatetime = date)
 
         try:
             db.session.add(user)

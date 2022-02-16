@@ -22,15 +22,17 @@ Reply to customer feedback
     </style>
 
 <div class="container col-xxl-8 px-4 py-5">
-    <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
-      <div class="col-md-10 mx-auto col-lg-5">
-        <form class="p-4 p-md-5 border rounded-3 bg-light"  method = "POST">
+<div class="col-lg-10 col-md-12 mx-auto">
+    <div class="content">
+<div class = "container">
+    <h4>Reply to the customer</h4>
+        <form  method = "POST">
             <hr class="my-4">
              <div class="form-floating mb-3">
-            <p>{{ feedback.name }}</p>
-                 <p>{{ feedback.email }}</p>
-                 <p>{{ feedback.subject }}</p>
-                 <p> {{ feedback.message}}</p>
+            <p>Name:  {{ feedback.name }}</p>
+                 <p>E-mail:  {{ feedback.email }}</p>
+                 <p>Subject:  {{ feedback.subject }}</p>
+                 <p>Message:  {{ feedback.message}}</p>
             </div>
 
 <div class="form-floating mb-3">
@@ -51,5 +53,6 @@ Reply to customer feedback
       </div>
     </div>
 </div>
+
 
       {% endblock %}

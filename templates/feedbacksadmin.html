@@ -68,6 +68,7 @@ Menus
       <th>E-mail</th>
       <th>Subject</th>
       <th>Message</th>
+      <th>Date</th>
       <th>Reply</th>
       <th>Delete</th>
 
@@ -79,6 +80,7 @@ Menus
       <td>{{ el.email}}</td>
       <td>{{ el.subject}}</td>
       <td>{{ el.message}}</td>
+       <td>{{ el.updatetime}}</td>
 
       <td><a href = "/feedbacksadmin/{{ el.id }}/reply" class = "btn btn-primary" style = "font-size: 14px"> Reply</a></td>
       <td> <a href = "/feedbacksadmin/{{ el.id }}/delete" class = "btn btn-danger" style = "font-size: 14px"> Delete</a></td>
