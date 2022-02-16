@@ -5,5 +5,114 @@ Menus
 {% endblock %}
 
 {% block body%}
+  <style>
+body {font-family: Arial, Helvetica, sans-serif;}
+* {box-sizing: border-box;}
+
+input[type=text], select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+input[type=submit] {
+  background-color: #04AA6D;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+      .bd-placeholder-img {
+        font-size: 1rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+ .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+<body>
+
+<h2 class="display-5 fw-bold lh-1 mb-3 text-center">Our contacts</h2>
+  <div class="container col-xl-10 col-xxl-8 px-4 py-5">
+
+    <div class="row align-items-center g-lg-5 py-5">
+      <div class="col-lg-6">
+
+<br>
+        <p class="lead">Puh: +358401234567</p>
+        <p class="lead">Customer support: +358409876543</p>
+        <p class="lead">e-mail: art.catering@gmail.com</p>
+        <br>
+        <p class="lead">Runeberginkatu, 11, Helsinki 00100</p>
+
+        <p class="lead">Simple Catering Oy</p>
+          <br>
+          <br>
+        <p class="col-lg-10 fs-4">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1984.6595006355221!2d24.925021015981784!3d60.169815581960805!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46920a346e4e77df%3A0x23d5e2f7b8533153!2sRuneberginkatu%2011%2C%2000100%20Helsinki!5e0!3m2!1sen!2sfi!4v1645018005325!5m2!1sen!2sfi" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </p>
+        <br>
+      </div>
+
+      <div class="col-md-10 mx-auto col-lg-5">
+     <form class="p-4 p-lg-5 border rounded-3 bg-light" method = 'POST'>
+
+    <label for="fname">Name</label>
+    <input type="text" id="fname" name="name" placeholder="Your name..">
+
+    <label for="email">E-mail</label>
+    <input type="text" id="email" name="email" placeholder="Your e-mail..">
+
+                    <label for="lname">Subject</label>
+    <input type="text" id="lname" name="customertext" placeholder="Write something..">
+
+    <label for="subject">Your message</label>
+    <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>
+
+
+    <input type="submit" value="Submit">
+  </form>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+</body>
+</html>
 
 {% endblock %}

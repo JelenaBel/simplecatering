@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title%}
+Reply to customer feedback
+{% endblock %}
+
+{% block body%}
+ <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+<div class="container col-xxl-8 px-4 py-5">
+    <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+      <div class="col-md-10 mx-auto col-lg-5">
+        <form class="p-4 p-md-5 border rounded-3 bg-light"  method = "POST">
+            <hr class="my-4">
+             <div class="form-floating mb-3">
+            <p>{{ feedback.name }}</p>
+                 <p>{{ feedback.email }}</p>
+                 <p>{{ feedback.subject }}</p>
+                 <p> {{ feedback.message}}</p>
+            </div>
+
+<div class="form-floating mb-3">
+            <input type="subject" class="form-control" id="floatingInputName" name="subject" value = {{ feedback.subject }} placeholder="subject">
+            <label for="floatingInputName">Subject</label>
+          </div>
+
+            <div class="form-floating mb-3">
+            <input type="message" class="form-control" id="floatingMessage" name ="message"  placeholder="You answer here">
+            <label for="floatingPassword">Message</label>
+          </div>
+
+          <button class="w-100 btn btn-lg btn-primary" type="submit">Send</button>
+
+
+
+        </form>
+      </div>
+    </div>
+</div>
+
+      {% endblock %}

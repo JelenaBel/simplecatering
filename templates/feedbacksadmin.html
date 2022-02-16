@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title%}
+Menus
+{% endblock %}
+
+{% block body%}
+
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+#myInput {
+
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
+#myTable {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+#myTable th, #myTable td {
+  text-align: left;
+  padding: 12px;
+    padding-right: 20px;
+    font-size: 14px;
+}
+
+#myTable tr {
+  border-bottom: 1px solid #ddd;
+}
+
+#myTable tr.header, #myTable tr:hover {
+  background-color: #f1f1f1;
+}
+</style>
+
+
+
+<body>
+
+<div class="col-lg-10 col-md-12 mx-auto">
+<div class="content">
+<div class = "container">
+
+
+
+<h3>Feedback</h3>
+
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+
+<table class ="table-responsive" id="myTable" style ="width: auto">
+  <tr class="header">
+    <th style = "width:auto" >ID</th>
+      <th>Name</th>
+      <th>E-mail</th>
+      <th>Subject</th>
+      <th>Message</th>
+      <th>Reply</th>
+      <th>Delete</th>
+
+  </tr>
+     {%  for el in feedback %}
+  <tr>
+    <td>{{ el.id}}</td>
+    <td>{{ el.name}}</td>
+      <td>{{ el.email}}</td>
+      <td>{{ el.subject}}</td>
+      <td>{{ el.message}}</td>
+
+      <td><a href = "/feedbacksadmin/{{ el.id }}/reply" class = "btn btn-primary" style = "font-size: 14px"> Reply</a></td>
+      <td> <a href = "/feedbacksadmin/{{ el.id }}/delete" class = "btn btn-danger" style = "font-size: 14px"> Delete</a></td>
+  </tr>
+{% endfor %}
+
+</table>
+
+<script>
+function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+</script>
+
+</div>
+</div>
+</div>
+</body>
+
+{% endblock %}
