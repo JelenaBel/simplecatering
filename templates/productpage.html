@@ -1,22 +1,37 @@
+{% extends "basecustomer.html" %}
 
+{% block title%}
+Menus
+{% endblock %}
 
+{% block body%}
 
-<div className="row flex-lg-row align-items-center g-5 py-5">
-                    <div className="col-10 col-sm-8 col-lg-6">
-                      <Image src={"/img/" + movies[i].image} className="d-block mx-lg-auto img-fluid"  alt="Bootstrap Themes" width="300" height="270" loading="lazy" />
+<div class = "container">
+ <div class="container px-4 px-sm-5 my-2">
+<div class="row flex-lg-row align-items-center g-5 py-5">
+                    <div class="col-10 col-sm-8 col-lg-6">
+                      <img class="d-block mx-lg-auto img-fluid" src="/static/images/{{product.photo}}"   alt="..." style="width:500px"    >
                     </div>
-                    <div className="col-lg-6">
-                      <h1 className="display-5 fw-bold lh-1 mb-3" variant="top">{movies[i].name}</h1>
-                      <p className="lead"> {movies[i].category}</p>
-                                            <Rating
-                            name="customized-10" style={{ marginBottom: '20px' }} defaultValue={movies[i].imbdrating} size="small"  max={10} />
-         <p className="lead"> IMDB Rating:  {movies[i].imbdrating}</p>
-                      <p >{movies[i].shortdescription}</p>
-                      <br></br>
+                    <div class="col-lg-6">
+                      <h1 class="display-5 fw-bold lh-1 mb-3" >{{ product.title }}</h1>
+                        <h6>Category:</h6>
+                      <p class="lead"> {{ product.category }}</p>
+                        <h6>Price:</h6>
+                      <p class="lead"> {{ product.price }} /per person</p>
+                        <h6>Description:</h6>
+                      <p class="lead">{{ product.description }}</p>
+                      <br>
 
-                      <div className="d-grid gap-2 d-md-flex justify-content-md-start">
+                                    <a class="btn btn-outline-dark mt-auto"  href="/shop/{{ product.id }}/addtocard">Add to card</a>
+                        <a class="btn btn-outline-dark mt-auto"  href="/shop/{{ product.id }}/addtowishlist">Add to wishlist</a>
+
+                            </div>
+
 
 
                       </div>
                     </div>
-                  </div>
+</div>
+
+
+{% endblock %}

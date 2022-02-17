@@ -25,6 +25,10 @@ app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
 
 
+class MySessions:
+    baskets_map = {}
+
+
 class Products(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
@@ -75,6 +79,48 @@ class Reply(db.Model):
 
 db.create_all()
 
+
+class Item:
+    def __init__(self, product):
+        self.product = product
+        self.quantity = 1
+
+
+    def item_get_id (self):
+        return self.product.id
+
+    def item_change_quantity (self):
+        self.quantity = self.quantity+1
+
+    def get_quantity (self):
+        return self.quantity
+
+    def to_string(self):
+        return "ID: " + str(self.product.id) + " Quantity: " + str(self.quantity)
+
+
+class ShoppingCard:
+    def __init__(self):
+        self.productlist = []
+
+    def additem(self, item):
+#        for element in self.productlist:
+#           if element.item_get_id() == item.item_get_id():
+#              element.item_change_quantity()
+#         else:
+        self.productlist.append(item)
+
+    def get_shopping_list(self):
+        return self
+
+    def to_string(self):
+        for_print = "shopping cart: "
+        for element in self.productlist:
+            for_print = for_print + ", "+element.to_string()
+        return for_print
+
+
+
 @app.route('/')
 @app.route('/index')
 def indexpage():  # put application's code here
@@ -96,6 +142,41 @@ def shopcreate():
     products = Products.query.all();
 
     return render_template("create.html", products=products)
+
+
+@app.route('/shop/<int:id>/readmore')
+def readmore(id):
+    product = Products.query.get_or_404(id)
+    return render_template("productpage.html", product=product)
+
+
+@app.route('/shop/<int:id>/addtocard')
+def addtocard(id):
+    product = db.session.query(Products).filter(Products.id==id).all()
+    product = product[0]
+    newitem = Item(product)
+    user_id = session['user_id']
+
+    if user_id in MySessions.baskets_map.keys():
+        print("Ебанутый питон")
+
+    else:
+        shoppingcard = ShoppingCard()
+        MySessions.baskets_map[user_id] = shoppingcard
+
+    cart: ShoppingCard = MySessions.baskets_map[user_id]
+    cart.additem(newitem)
+    print(cart.to_string())
+
+    return redirect("/shop")
+
+
+@app.route('/shoppingcard')
+def shoppingcard():
+
+
+        return render_template("shoppingcard.html")
+
 
 
 @app.route('/about')
@@ -449,8 +530,10 @@ def sending_email(name, email):
 
 @app.route('/logout')
 def logout():
+    session.clear()
     session['user'] = "0"
     session['user_email'] = "0"
+
 
     print("gjkexblkjc")
 
