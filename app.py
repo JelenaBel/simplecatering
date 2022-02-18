@@ -104,11 +104,15 @@ class ShoppingCard:
         self.productlist = []
 
     def additem(self, item):
-#        for element in self.productlist:
-#           if element.item_get_id() == item.item_get_id():
-#              element.item_change_quantity()
-#         else:
-        self.productlist.append(item)
+        added = False
+        for element in self.productlist:
+            if element.item_get_id() == item.item_get_id():
+                element.item_change_quantity()
+                added = True
+                break
+
+        if not added:
+            self.productlist.append(item)
 
     def get_shopping_list(self):
         return self
@@ -157,8 +161,8 @@ def addtocard(id):
     newitem = Item(product)
     user_id = session['user_id']
 
-    if user_id in MySessions.baskets_map.keys():
-        print("Ебанутый питон")
+    if user_id in  MySessions.baskets_map.keys():
+        print("Basket exist")
 
     else:
         shoppingcard = ShoppingCard()
@@ -173,9 +177,11 @@ def addtocard(id):
 
 @app.route('/shoppingcard')
 def shoppingcard():
+    user_id = session['user_id']
+    cart: ShoppingCard = MySessions.baskets_map[user_id]
 
 
-        return render_template("shoppingcard.html")
+    return render_template("shoppingcard.html", cart=cart)
 
 
 

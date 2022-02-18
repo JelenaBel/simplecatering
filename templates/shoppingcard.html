@@ -4,95 +4,90 @@
 Contact
 {% endblock %}
 {% block body%}
-<link href="/docs/5.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
-    <!-- Favicons -->
-<link rel="apple-touch-icon" href="/docs/5.1/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
-<link rel="icon" href="/docs/5.1/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
-<link rel="icon" href="/docs/5.1/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
-<link rel="manifest" href="/docs/5.1/assets/img/favicons/manifest.json">
-<link rel="mask-icon" href="/docs/5.1/assets/img/favicons/safari-pinned-tab.svg" color="#7952b3">
-<link rel="icon" href="/docs/5.1/assets/img/favicons/favicon.ico">
-<meta name="theme-color" content="#7952b3">
+   <style>
+
+* {
+  box-sizing: border-box;
+}
+</style>
+     <style>
+
+* {
+  box-sizing: border-box;
+}
+
+#myInput {
+
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 20px 12px 20px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
+#myTable {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #ddd;
+  font-size: 16px;
+}
+
+#myTable th, #myTable td {
+  text-align: left;
+  padding: 12px;
+}
+
+#myTable tr {
+  border-bottom: 1px solid #ddd;
+}
+
+#myTable tr.header, #myTable tr:hover {
+  background-color: #f1f1f1;
+}
+</style>
+    <body>
 
 
-    <style>
+<div class="col-lg-10 col-md-12 mx-auto" style = "align-items: center">
+<div class = "container">
+<br>
+<h2>Shopping card</h2>
+<br>
+
+<table class ="table-responsive" id="myTable" style ="width: auto">
+  <tr class="header">
+     <th>Category</th>
+      <th>Product ID</th>
+    <th >Name</th>
+      <th >Picture</th>
+      <th >Price</th>
+      <th>Quantity<i class="bi bi-plus-square-fill"></i></th>
+      <th>Price</th>
+      <th> Delete</th>
+  </tr>
+    {%  for item in cart.productlist  %}
+
+  <tr>
+      <td>{{ item.product.category }}</td>
+    <td>{{ item.product.id }}</td>
+    <td>{{ item.product.title }}</td>
+      <td><img class="img-thumbnail" style ="width:200px" alt="..."   src = "/static/images/{{item.product.photo}}"/></td>
+      <td>{{ item.product.price }}€ /per person</td>
+      <td><i class="bi bi-plus-square-fill"></i>{{ item.quantity }}<i class="bi bi-plus-square-fill"></i></td>
+      <td></td>
+      <td> <a href = "/productsadmin/{{ item.product.id }}/delete" class = "btn btn-danger" style = "font-size: 10px"> Delete</a></td>
+  </tr>
+  {% endfor %}
+</table>
 
 
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-    </style>
 
 
-    <!-- Custom styles for this template -->
-    <link href="form-validation.css" rel="stylesheet">
-  </head>
-  <body >
-
-<div class="container">
-  <main>
-    <div class="py-5 text-center">
-
-      <h2>Checkout form</h2>
-      </div>
-
-    <div class="row g-5">
-      <div class="col-md-5 col-lg-4 order-md-last">
-        <h4 class="d-flex justify-content-between align-items-center mb-3">
-          <span class="text-primary">Your cart</span>
-          <span class="badge bg-primary rounded-pill">3</span>
-        </h4>
-        <ul class="list-group mb-3">
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-              <h6 class="my-0">Product name</h6>
-              <small class="text-muted">Brief description</small>
-            </div>
-            <span class="text-muted">$12</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-              <h6 class="my-0">Second product</h6>
-              <small class="text-muted">Brief description</small>
-            </div>
-            <span class="text-muted">$8</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-              <h6 class="my-0">Third item</h6>
-              <small class="text-muted">Brief description</small>
-            </div>
-            <span class="text-muted">$5</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between bg-light">
-            <div class="text-success">
-              <h6 class="my-0">Promo code</h6>
-              <small>EXAMPLECODE</small>
-            </div>
-            <span class="text-success">−$5</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between">
-            <span>Total (USD)</span>
-            <strong>$20</strong>
-          </li>
-        </ul>
-
-        <form class="card p-2">
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Promo code">
-            <button type="submit" class="btn btn-secondary">Redeem</button>
-          </div>
-        </form>
-      </div>
-
-    </div>
-  </main>
 </div>
-
-  </body>
-</html>
+</div>
+    </body>
 
 {% endblock %}
