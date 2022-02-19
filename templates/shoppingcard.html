@@ -76,11 +76,34 @@ Contact
     <td>{{ item.product.title }}</td>
       <td><img class="img-thumbnail" style ="width:200px" alt="..."   src = "/static/images/{{item.product.photo}}"/></td>
       <td>{{ item.product.price }}€ /per person</td>
-      <td><i class="bi bi-plus-square-fill"></i>{{ item.quantity }}<i class="bi bi-plus-square-fill"></i></td>
-      <td></td>
-      <td> <a href = "/productsadmin/{{ item.product.id }}/delete" class = "btn btn-danger" style = "font-size: 10px"> Delete</a></td>
+      <td><a href = "/shoppingcard/{{ item.product.id }}/minus" class = "btn btn-outline-secondary" style = "font-size: 12px">-</a>  {{ item.quantity }} <a href = "/shoppingcard/{{ item.product.id }}plus" class = "btn btn-outline-secondary" style = "font-size: 12px"> + </a></td>
+      <td>€   {{ item.total }}  </td>
+      <td> <a href = "/shoppingcard/{{ item.product.id }}/delete" class = "btn btn-danger" style = "font-size: 10px"> Delete</a></td>
   </tr>
+
   {% endfor %}
+ <tr>
+     <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+        <td style = "font-size: 18px; font-weight: bold">ALV(24%):</td>
+        <td>€  {{ alv }}</td>
+
+        </tr>
+        <tr>
+             <td></td>
+             <td></td>
+             <td></td>
+             <td></td>
+             <td></td>
+             <td></td>
+        <td style = "font-size: 18px; font-weight: bold">Total:</td>
+        <td>€  {{ total }} </td>
+
+        </tr>
 </table>
 
 

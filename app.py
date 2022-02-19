@@ -84,16 +84,20 @@ class Item:
     def __init__(self, product):
         self.product = product
         self.quantity = 1
-
+        self.total = self.quantity*self.product.price
 
     def item_get_id (self):
         return self.product.id
 
     def item_change_quantity (self):
         self.quantity = self.quantity+1
+        self.total = self.quantity*self.product.price
 
     def get_quantity (self):
         return self.quantity
+
+    def get_item_total_price(self):
+        return self.product.price * self.quantity
 
     def to_string(self):
         return "ID: " + str(self.product.id) + " Quantity: " + str(self.quantity)
@@ -114,8 +118,20 @@ class ShoppingCard:
         if not added:
             self.productlist.append(item)
 
+    def deleteitem(self, id):
+        for element in self.productlist:
+            if element.item_get_id() == id:
+                self.productlist.remove(element)
+
+
     def get_shopping_list(self):
         return self
+
+    def count_card_total(self):
+        card_total = 0
+        for element in self.productlist:
+            card_total = card_total + element.total
+        return card_total
 
     def to_string(self):
         for_print = "shopping cart: "
@@ -162,6 +178,7 @@ def addtocard(id):
     user_id = session['user_id']
 
     if user_id in  MySessions.baskets_map.keys():
+
         print("Basket exist")
 
     else:
@@ -170,18 +187,45 @@ def addtocard(id):
 
     cart: ShoppingCard = MySessions.baskets_map[user_id]
     cart.additem(newitem)
+    newitem.get_item_total_price()
     print(cart.to_string())
 
     return redirect("/shop")
+
+@app.route('/shoppingcard/<int:id>/delete')
+def delete_item_shoppingcard(id):
+    user_id = session['user_id']
+    cart: ShoppingCard = MySessions.baskets_map[user_id]
+    for el in cart.productlist:
+        if el.item_get_id() == id:
+            cart.deleteitem(id)
+            MySessions.baskets_map[user_id] = cart
+            break
+
+    return redirect("/shoppingcard")
+
+
 
 
 @app.route('/shoppingcard')
 def shoppingcard():
     user_id = session['user_id']
-    cart: ShoppingCard = MySessions.baskets_map[user_id]
+
+    if user_id not in MySessions.baskets_map.keys():
+        return render_template("shoppingcardempty.html")
+
+    else:
+        cart: ShoppingCard = MySessions.baskets_map[user_id]
+        if len(cart.productlist)==0:
+            return render_template("shoppingcardempty.html")
+        else:
+            total = (cart.count_card_total())
+            alv = 0.24 * total
+            alv = float('{:.3f}'.format(alv))
+
+            return render_template("shoppingcard.html", cart=cart, alv=alv, total=total)
 
 
-    return render_template("shoppingcard.html", cart=cart)
 
 
 
