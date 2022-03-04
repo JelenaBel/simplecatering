@@ -76,7 +76,7 @@ Contact
     <td>{{ item.product.title }}</td>
       <td><img class="img-thumbnail" style ="width:200px" alt="..."   src = "/static/images/{{item.product.photo}}"/></td>
       <td>{{ item.product.price }}€ /per person</td>
-      <td><a href = "/shoppingcard/{{ item.product.id }}/minus" class = "btn btn-outline-secondary" style = "font-size: 12px">-</a>  {{ item.quantity }} <a href = "/shoppingcard/{{ item.product.id }}plus" class = "btn btn-outline-secondary" style = "font-size: 12px"> + </a></td>
+      <td><a href = "/shoppingcard/{{ item.product.id }}/minus" class = "btn btn-outline-secondary" style = "font-size: 12px">-</a>  {{ item.quantity }} <a href = "/shoppingcard/{{ item.product.id }}/plus" class = "btn btn-outline-secondary" style = "font-size: 12px"> + </a></td>
       <td>€   {{ item.total }}  </td>
       <td> <a href = "/shoppingcard/{{ item.product.id }}/delete" class = "btn btn-danger" style = "font-size: 10px"> Delete</a></td>
   </tr>

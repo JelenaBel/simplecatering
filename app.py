@@ -203,6 +203,34 @@ def delete_item_shoppingcard(id):
 
     return redirect("/shoppingcard")
 
+@app.route('/shoppingcard/<int:id>/minus')
+def minus_item_shoppingcard(id):
+    product_id = str(id)
+    user_id = session['user_id']
+    old_cart = session['user_cart'].split(", ")
+    old_cart.remove("")
+    for el in old_cart:
+        if el == product_id:
+            old_cart.remove(product_id)
+            break
+
+    new_shopping_cart = ""
+    for el in old_cart:
+        new_shopping_cart = new_shopping_cart + el +", "
+
+    session['user_cart'] = new_shopping_cart
+    print("New_shopping_cart")
+    print (new_shopping_cart)
+
+    return redirect("/shoppingcard")
+
+@app.route('/shoppingcard/<int:id>/plus')
+def plus_item_shoppingcard(id):
+    product_id = str(id)
+    session['user_cart'] = session['user_cart']+", "+ product_id
+
+    return redirect("/shoppingcard")
+
 
 @app.route('/shoppingcard')
 def shoppingcard():
@@ -255,6 +283,7 @@ def shoppingcard():
 
         total = cart_full.count_card_total()
         alv = total*0.24
+        alv = float('{:.2f}'.format(alv))
         return render_template("shoppingcard.html", cart=cart_full, alv=alv, total=total)
 
 
