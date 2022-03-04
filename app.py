@@ -1,13 +1,13 @@
-from flask import Flask,  render_template, url_for, request, redirect, session, flash
+from flask import Flask, render_template, url_for, request, redirect, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from datetime import datetime
 import random
+import json
 import os
 
-
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] ='postgresql://kejlhjougftxhg:b84959d4f70d021ae06b0b6e678d62db38ff093ef430c60c0265a5b187d6377f@ec2-52-211-158-144.eu-west-1.compute.amazonaws.com:5432/d4kp34r5liihrn'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://linlbopoiknkri:82beb352c58d03e9e580c00f5d8434b56bc4ae9b4868d08106641df8380f1a53@ec2-54-77-90-39.eu-west-1.compute.amazonaws.com:5432/dcaur7p267os7d'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
@@ -25,19 +25,15 @@ app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
 
 
-class MySessions:
-    baskets_map = {}
-
-
 class Products(db.Model):
-
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), primary_key=False)
-    price = db.Column(db.Integer )
+    price = db.Column(db.Integer)
     category = db.Column(db.String(100), primary_key=False)
     description = db.Column(db.Text, nullable=False)
     photo = db.Column(db.String(200))
     updatetime = db.Column(db.Date, default=datetime.utcnow)
+
     def __repr__(self):
         return f"<products {self.id}>"
 
@@ -48,6 +44,7 @@ class Users(db.Model):
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100), nullable=True)
     updatetime = db.Column(db.Date, default=datetime.utcnow)
+
     def __repr__(self):
         return f"<users {self.id}>"
 
@@ -59,12 +56,12 @@ class Feedback(db.Model):
     subject = db.Column(db.String(300), nullable=False)
     message = db.Column(db.VARCHAR(1000), nullable=False)
     updatetime = db.Column(db.Date, default=datetime.utcnow)
-    publicity = db.Column(db.String(100), default = "No")
-    replied = db.Column(db.String(100), default = "No")
-
+    publicity = db.Column(db.String(100), default="No")
+    replied = db.Column(db.String(100), default="No")
 
     def __repr__(self):
         return f"<feedback {self.id}>"
+
 
 class Reply(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -81,19 +78,19 @@ db.create_all()
 
 
 class Item:
-    def __init__(self, product):
+    def __init__(self, product, quantity):
         self.product = product
-        self.quantity = 1
-        self.total = self.quantity*self.product.price
+        self.quantity = quantity
+        self.total = self.quantity * self.product.price
 
-    def item_get_id (self):
+    def item_get_id(self):
         return self.product.id
 
-    def item_change_quantity (self):
-        self.quantity = self.quantity+1
-        self.total = self.quantity*self.product.price
+    def item_change_quantity(self):
+        self.quantity = self.quantity + 1
+        self.total = self.quantity * self.product.price
 
-    def get_quantity (self):
+    def get_quantity(self):
         return self.quantity
 
     def get_item_total_price(self):
@@ -123,10 +120,6 @@ class ShoppingCard:
             if element.item_get_id() == id:
                 self.productlist.remove(element)
 
-
-    def get_shopping_list(self):
-        return self
-
     def count_card_total(self):
         card_total = 0
         for element in self.productlist:
@@ -136,9 +129,8 @@ class ShoppingCard:
     def to_string(self):
         for_print = "shopping cart: "
         for element in self.productlist:
-            for_print = for_print + ", "+element.to_string()
+            for_print = for_print + ", " + element.to_string()
         return for_print
-
 
 
 @app.route('/')
@@ -172,67 +164,103 @@ def readmore(id):
 
 @app.route('/shop/<int:id>/addtocard')
 def addtocard(id):
-    product = db.session.query(Products).filter(Products.id==id).all()
-    product = product[0]
-    newitem = Item(product)
+    product = Products.query.get_or_404(id)
+
     user_id = session['user_id']
 
-    if user_id in  MySessions.baskets_map.keys():
+    if 'user_cart' in session:
+        product_string = str(product.id) + ", "
+        session['user_cart'] = session['user_cart'] + product_string
 
-        print("Basket exist")
 
     else:
-        shoppingcard = ShoppingCard()
-        MySessions.baskets_map[user_id] = shoppingcard
 
-    cart: ShoppingCard = MySessions.baskets_map[user_id]
-    cart.additem(newitem)
-    newitem.get_item_total_price()
-    print(cart.to_string())
+        product_string = str(product.id) + ", "
+        session['user_cart'] = product_string
+
 
     return redirect("/shop")
 
+
 @app.route('/shoppingcard/<int:id>/delete')
 def delete_item_shoppingcard(id):
+    product_id = str(id)
     user_id = session['user_id']
-    cart: ShoppingCard = MySessions.baskets_map[user_id]
-    for el in cart.productlist:
-        if el.item_get_id() == id:
-            cart.deleteitem(id)
-            MySessions.baskets_map[user_id] = cart
-            break
+    old_cart = session['user_cart'].split(", ")
+    old_cart.remove("")
+    for el in old_cart:
+        if el == product_id:
+            old_cart.remove(product_id)
+            continue
+
+    new_shopping_cart = ""
+    for el in old_cart:
+        new_shopping_cart = new_shopping_cart + el +", "
+
+    session['user_cart'] = new_shopping_cart
+    print("New_shopping_cart")
+    print (new_shopping_cart)
 
     return redirect("/shoppingcard")
-
-
 
 
 @app.route('/shoppingcard')
 def shoppingcard():
     user_id = session['user_id']
 
-    if user_id not in MySessions.baskets_map.keys():
+    if not session['user_cart']:
         return render_template("shoppingcardempty.html")
 
     else:
-        cart: ShoppingCard = MySessions.baskets_map[user_id]
-        if len(cart.productlist)==0:
+        cart = session['user_cart'].split(", ")
+        cart.remove("")
+        cart.sort()
+        print(cart)
+
+        if len(cart) == 0:
             return render_template("shoppingcardempty.html")
+
         else:
-            total = (cart.count_card_total())
-            alv = 0.24 * total
-            alv = float('{:.3f}'.format(alv))
+            products_in_card = {}
+            counter = 1
 
-            return render_template("shoppingcard.html", cart=cart, alv=alv, total=total)
+            for i in range(len(cart)):
+                if i == len(cart)-1:
+                    products_in_card[cart[i]] = counter
+                    break
 
+                if cart[i] == cart[i+1]:
+                    counter = counter+1
 
+                else:
+                    products_in_card[cart[i]] = counter
+                    counter = 1
 
+        cart_full = ShoppingCard()
+        for key in products_in_card:
+            print(key)
+            product_id = key
+            if product_id!= "" and product_id!= " ":
+                quantity = products_in_card[product_id]
+                print(quantity)
+
+                product = Products.query.get_or_404(product_id)
+                print("Price :" )
+                print(product.price)
+
+                item_card = Item(product, quantity)
+                print (item_card.to_string())
+                item_card.get_item_total_price()
+                cart_full.additem(item_card)
+
+        total = cart_full.count_card_total()
+        alv = total*0.24
+        return render_template("shoppingcard.html", cart=cart_full, alv=alv, total=total)
 
 
 @app.route('/about')
 def about():  # put application's code here
     return render_template("about.html")
-
 
 
 @app.route('/contact')
@@ -247,8 +275,6 @@ def feedback():
         email = request.form['email']
         subject = request.form['customertext']
         message = request.form['subject']
-
-
 
         contact1 = Feedback(name=name, email=email, subject=subject, message=message)
 
@@ -269,7 +295,7 @@ def feedback():
 
 def sending_email_feedbackform(name, email):
     msg = Message('You letter to Simple Catering.', sender='taide.catering@gmail.com', recipients=[email])
-    msg.body = "Hey, "+name+"! Thank you for contacting Simple Catering! We will answer for your letter as soon as possible."
+    msg.body = "Hey, " + name + "! Thank you for contacting Simple Catering! We will answer for your letter as soon as possible."
     mail.send(msg)
     return "Message sent!"
 
@@ -293,18 +319,18 @@ def deleteproduct(id):
     try:
         db.session.delete(product)
         db.session.commit()
-        return redirect ("/productsadmin")
+        return redirect("/productsadmin")
     except:
         return ("An error occurred while deleting the product")
 
-        return redirect  ("/productsadmin")
+        return redirect("/productsadmin")
 
 
 @app.route('/productsadmin/<int:id>/update', methods=['POST', 'GET'])
 def updateproduct(id):
     product = Products.query.get(id)
     if request.method == "POST":
-        print ("collect info for update")
+        print("collect info for update")
         product.id = id
         product.title = request.form['productname']
         product.price = request.form['productprice']
@@ -312,8 +338,7 @@ def updateproduct(id):
         product.description = request.form['subject']
         file = request.files['filename']
 
-
-        if file.filename!= '':
+        if file.filename != '':
             product.photo = file.filename
 
         if file and file.filename:
@@ -341,11 +366,11 @@ def deletecustomer(id):
     try:
         db.session.delete(user)
         db.session.commit()
-        return redirect ("/customersadmin")
+        return redirect("/customersadmin")
     except:
         return ("An error occurred while deleting the product")
 
-        return redirect  ("/customersadmin")
+        return redirect("/customersadmin")
 
 
 @app.route('/customersadmin/<int:id>/update', methods=['POST', 'GET'])
@@ -357,7 +382,6 @@ def updateuser(id):
         user.email = request.form['email']
         if request.form['password'] == request.form['passwordRepeat']:
             user.password = request.form['password']
-
 
         try:
 
@@ -382,7 +406,6 @@ def updateuseritself(id):
         user.email = request.form['email']
         if request.form['password'] == request.form['passwordRepeat']:
             user.password = request.form['password']
-
 
         try:
 
@@ -419,11 +442,11 @@ def deletefeedback(id):
     try:
         db.session.delete(feedback)
         db.session.commit()
-        return redirect ("/feedbacksadmin")
+        return redirect("/feedbacksadmin")
     except:
         return ("An error occurred while deleting the feedback")
 
-        return redirect  ("/feedbacksadmin")
+        return redirect("/feedbacksadmin")
 
 
 @app.route('/feedbacksadmin/<int:id>/reply', methods=['POST', 'GET'])
@@ -436,13 +459,12 @@ def reply_feedback(id):
         subject = request.form['subject']
         message = request.form['message']
         publicity = "No"
-        reply =  "No"
-
+        reply = "No"
 
         try:
             sending_reply_customerfeedback(customeremail, subject, message)
             reply = Reply(id=idreply, feedback_id=feedback_id, subject=subject, message=message)
-            print (idreply)
+            print(idreply)
             print(feedback_id)
             print(subject)
             print(message)
@@ -459,16 +481,14 @@ def reply_feedback(id):
         return render_template("feedbackadminreply.html", feedback=feedback)
 
 
-def sending_reply_customerfeedback(email, subject,  message):
+def sending_reply_customerfeedback(email, subject, message):
     msg = Message(subject, sender='taide.catering@gmail.com', recipients=[email])
     msg.body = message
     mail.send(msg)
     return "Message sent!"
 
+
 @app.route('/aboutuser/<int:id>/update', methods=['POST', 'GET'])
-
-
-
 @app.route('/addproduct', methods=['POST', 'GET'])
 def addproduct():
     if request.method == "POST":
@@ -478,7 +498,7 @@ def addproduct():
         category = request.form['category']
         description = request.form['subject']
         file = request.files['filename']
-        numberid= random.randint(100000, 999999)
+        numberid = random.randint(100000, 999999)
         print(numberid)
 
         if file.filename == '':
@@ -486,10 +506,10 @@ def addproduct():
             return render_template("addproduct.html")
 
         if file and file.filename:
-
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
 
-        product = Products(id=numberid, title=name, price=price, category=category, description=description, photo=file.filename)
+        product = Products(id=numberid, title=name, price=price, category=category, description=description,
+                           photo=file.filename)
 
         try:
             db.session.add(product)
@@ -542,7 +562,6 @@ def signup():
     return render_template("signup.html")
 
 
-
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     if request.method == "POST":
@@ -554,7 +573,7 @@ def register():
             numberid = random.randint(10000, 99999)
             date = datetime.utcnow()
             print(date)
-            user = Users(id=numberid, name=name, email=email, password=password, updatetime = date)
+            user = Users(id=numberid, name=name, email=email, password=password, updatetime=date)
 
         try:
             db.session.add(user)
@@ -573,7 +592,7 @@ def register():
 
 def sending_email(name, email):
     msg = Message('Hello from the other side!', sender='taide.catering@gmail.com', recipients=[email])
-    msg.body = "Hey, "+name+"! You are successfully registered on Simple Catering."
+    msg.body = "Hey, " + name + "! You are successfully registered on Simple Catering."
     mail.send(msg)
     return "Message sent!"
 
@@ -583,13 +602,12 @@ def logout():
     session.clear()
     session['user'] = "0"
     session['user_email'] = "0"
+    session['user_cart'] = ""
 
 
     print("gjkexblkjc")
 
-
     return redirect(url_for('menus'))
-
 
 
 if __name__ == '__main__':
