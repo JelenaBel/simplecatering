@@ -90,12 +90,21 @@ class Localization:
     dict = {'EN': dictionary_eng, 'FI': dictionary_fi, 'RU': dictionary_ru}
 
     def return_dictionary(lang):
-        if lang == 'FI':
-            dictionary = Localization.dict['FI']
-        elif lang == 'EN':
-            dictionary = Localization.dict['EN']
-        elif lang == 'RU':
-            dictionary = Localization.dict['RU']
+        if 'user_lang' in session:
+            if lang == 'FI':
+                dictionary = Localization.dict['FI']
+            elif lang == 'EN':
+                dictionary = Localization.dict['EN']
+            elif lang == 'RU':
+                dictionary = Localization.dict['RU']
+        else:
+            session["user_lang"] = 'FI'
+            if lang == 'FI':
+                dictionary = Localization.dict['FI']
+            elif lang == 'EN':
+                dictionary = Localization.dict['EN']
+            elif lang == 'RU':
+                dictionary = Localization.dict['RU']
         return dictionary
 
 
@@ -211,8 +220,10 @@ class ShoppingCard:
 @app.route('/index')
 def indexpage():  # put application's code here
     if 'user_lang' in session:
+        dictionary = Localization.return_dictionary(session['user_lang'])
+    else:
         session['user_lang'] = "EN"
-    dictionary = Localization.return_dictionary(session['user_lang'])
+        dictionary = Localization.return_dictionary(session['user_lang'])
     return render_template("index.html", dictionary=dictionary)
 
 
