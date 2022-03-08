@@ -6,6 +6,7 @@ import random
 import json
 import os
 
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://linlbopoiknkri:82beb352c58d03e9e580c00f5d8434b56bc4ae9b4868d08106641df8380f1a53@ec2-54-77-90-39.eu-west-1.compute.amazonaws.com:5432/dcaur7p267os7d'
 
@@ -23,6 +24,58 @@ app.config['MAIL_PASSWORD'] = 'helpporuoanpito'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
+
+
+class Localization:
+    dictionary_eng = {
+        'menu_artcatering': 'Art Catering',
+        'menu_menus': 'Menus',
+        'menu_create': 'Create',
+        'menu_calendar': 'Calendar',
+        'menu_signup': 'Sing up',
+        'menu_contact': 'Contact',
+        'menu_aboutus': 'About us',
+        'menu_admin': 'Admin',
+        'menu_logout': 'Logout',
+
+    }
+
+    dictionary_fi = {
+        'menu_artcatering': 'Art Catering',
+        'menu_menus': 'Menus',
+        'menu_create': 'Luoda',
+        'menu_calendar': 'Kalenteri',
+        'menu_signup': 'Kirjaudu',
+        'menu_contact': 'Ota yhteyttä',
+        'menu_aboutus': 'Meistä',
+        'menu_admin': 'Admin',
+        'menu_logout': 'Ulos',
+
+    }
+
+    dictionary_ru = {
+        'menu_artcatering': 'Art Кейтеринг',
+        'menu_menus': 'Меню',
+        'menu_create': 'Создать',
+        'menu_calendar': 'Календарь',
+        'menu_signup': 'Войти',
+        'menu_contact': 'Контакты',
+        'menu_aboutus': 'О нас',
+        'menu_admin': 'Админ',
+        'menu_logout': 'Выйти',
+
+    }
+
+    dict = {'EN': dictionary_eng, 'FI': dictionary_fi, 'RU': dictionary_ru}
+
+    def return_dictionary(lang):
+        if lang == 'FI':
+            dictionary = Localization.dict['FI']
+        elif lang == 'EN':
+            dictionary = Localization.dict['EN']
+        elif lang == 'RU':
+            dictionary = Localization.dict['RU']
+        return dictionary
 
 
 class Products(db.Model):
@@ -136,34 +189,55 @@ class ShoppingCard:
 @app.route('/')
 @app.route('/index')
 def indexpage():  # put application's code here
-    return render_template("index.html")
+    if not session['user_lang']:
+        session['user_lang'] = "EN"
+    dictionary = Localization.return_dictionary(session['user_lang'])
+    return render_template("index.html", dictionary = dictionary)
 
+
+@app.route('/<string:lang>')
+def change_lang(lang):
+    if lang == 'fi':
+        session['user_lang'] = "FI"
+    elif lang == 'en':
+        session['user_lang'] = "EN"
+    elif lang == 'ru':
+        session['user_lang'] = "RU"
+
+    dictionary = Localization.return_dictionary(session['user_lang'])
+
+    return render_template("index.html", dictionary = dictionary)
 
 @app.route('/admin')
 def admin():  # put application's code here
-    return render_template("adminmain.html")
+    dictionary = Localization.return_dictionary(session['user_lang'])
+    return render_template("adminmain.html", dictionary=dictionary)
 
 
 @app.route('/menus')
 def menus():  # put application's code here
-    return render_template("menus.html")
+    dictionary = Localization.return_dictionary(session['user_lang'])
+    return render_template("menus.html", dictionary=dictionary)
 
 
 @app.route('/shop')
 def shopcreate():
+    dictionary = Localization.return_dictionary(session['user_lang'])
     products = Products.query.all();
 
-    return render_template("create.html", products=products)
+    return render_template("create.html", products=products, dictionary=dictionary)
 
 
 @app.route('/shop/<int:id>/readmore')
 def readmore(id):
+    dictionary = Localization.return_dictionary(session['user_lang'])
     product = Products.query.get_or_404(id)
-    return render_template("productpage.html", product=product)
+    return render_template("productpage.html", product=product, dictionary=dictionary)
 
 
 @app.route('/shop/<int:id>/addtocard')
 def addtocard(id):
+    dictionary = Localization.return_dictionary(session['user_lang'])
     product = Products.query.get_or_404(id)
 
     user_id = session['user_id']
@@ -179,32 +253,37 @@ def addtocard(id):
         session['user_cart'] = product_string
 
 
-    return redirect("/shop")
+    return redirect("/shop", dictionary=dictionary)
 
 
 @app.route('/shoppingcard/<int:id>/delete')
 def delete_item_shoppingcard(id):
+    dictionary = Localization.return_dictionary(session['user_lang'])
     product_id = str(id)
     user_id = session['user_id']
     old_cart = session['user_cart'].split(", ")
     old_cart.remove("")
+    new_cart = []
     for el in old_cart:
         if el == product_id:
-            old_cart.remove(product_id)
-            continue
+           continue
+
+        else:
+            new_cart.add(el)
 
     new_shopping_cart = ""
-    for el in old_cart:
+    for el in new_cart:
         new_shopping_cart = new_shopping_cart + el +", "
 
     session['user_cart'] = new_shopping_cart
     print("New_shopping_cart")
     print (new_shopping_cart)
 
-    return redirect("/shoppingcard")
+    return redirect("/shoppingcard", dictionary=dictionary)
 
 @app.route('/shoppingcard/<int:id>/minus')
 def minus_item_shoppingcard(id):
+    dictionary = Localization.return_dictionary(session['user_lang'])
     product_id = str(id)
     user_id = session['user_id']
     old_cart = session['user_cart'].split(", ")
@@ -216,28 +295,30 @@ def minus_item_shoppingcard(id):
 
     new_shopping_cart = ""
     for el in old_cart:
-        new_shopping_cart = new_shopping_cart + el +", "
+        new_shopping_cart = new_shopping_cart + el + ", "
 
     session['user_cart'] = new_shopping_cart
     print("New_shopping_cart")
     print (new_shopping_cart)
 
-    return redirect("/shoppingcard")
+    return redirect("/shoppingcard", dictionary=dictionary)
 
 @app.route('/shoppingcard/<int:id>/plus')
 def plus_item_shoppingcard(id):
+    dictionary = Localization.return_dictionary(session['user_lang'])
     product_id = str(id)
-    session['user_cart'] = session['user_cart']+", "+ product_id
+    session['user_cart'] = session['user_cart']+ product_id +", "
 
-    return redirect("/shoppingcard")
+    return redirect("/shoppingcard", dictionary=dictionary)
 
 
 @app.route('/shoppingcard')
 def shoppingcard():
+    dictionary = Localization.return_dictionary(session['user_lang'])
     user_id = session['user_id']
 
     if not session['user_cart']:
-        return render_template("shoppingcardempty.html")
+        return render_template("shoppingcardempty.html", dictionary=dictionary)
 
     else:
         cart = session['user_cart'].split(", ")
@@ -246,7 +327,7 @@ def shoppingcard():
         print(cart)
 
         if len(cart) == 0:
-            return render_template("shoppingcardempty.html")
+            return render_template("shoppingcardempty.html", dictionary=dictionary)
 
         else:
             products_in_card = {}
@@ -284,21 +365,24 @@ def shoppingcard():
         total = cart_full.count_card_total()
         alv = total*0.24
         alv = float('{:.2f}'.format(alv))
-        return render_template("shoppingcard.html", cart=cart_full, alv=alv, total=total)
+        return render_template("shoppingcard.html", cart=cart_full, alv=alv, total=total, dictionary=dictionary)
 
 
 @app.route('/about')
 def about():  # put application's code here
-    return render_template("about.html")
+    dictionary = Localization.return_dictionary(session['user_lang'])
+    return render_template("about.html", dictionary=dictionary)
 
 
 @app.route('/contact')
 def contacts():  # put application's code here
-    return render_template("contacts.html")
+    dictionary = Localization.return_dictionary(session['user_lang'])
+    return render_template("contacts.html", dictionary=dictionary)
 
 
 @app.route('/contact', methods=['POST', 'GET'])
 def feedback():
+    dictionary = Localization.return_dictionary(session['user_lang'])
     if request.method == "POST":
         name = request.form['name']
         email = request.form['email']
@@ -311,7 +395,7 @@ def feedback():
             db.session.add(contact1)
             db.session.commit()
             sending_email_feedbackform(name, email)
-            return redirect('/')
+            return redirect('/', dictionary=dictionary)
 
         except:
 
@@ -319,7 +403,7 @@ def feedback():
 
             return "При отправке вашего отзыва произошла ошибка"
 
-    return render_template("contacts.html")
+    return render_template("contacts.html", dictionary=dictionary)
 
 
 def sending_email_feedbackform(name, email):
@@ -331,32 +415,36 @@ def sending_email_feedbackform(name, email):
 
 @app.route('/orders')
 def admin_orders():  # put application's code here
-    return render_template("orders.html")
+    dictionary = Localization.return_dictionary(session['user_lang'])
+    return render_template("orders.html", dictionary=dictionary)
 
 
 @app.route('/productsadmin')
 def productsadmin():
+    dictionary = Localization.return_dictionary(session['user_lang'])
     products = Products.query.all();
 
-    return render_template("productsadmin.html", products=products)
+    return render_template("productsadmin.html", products=products, dictionary=dictionary)
 
 
 @app.route('/productsadmin/<int:id>/delete')
 def deleteproduct(id):
+    dictionary = Localization.return_dictionary(session['user_lang'])
     product = Products.query.get_or_404(id);
 
     try:
         db.session.delete(product)
         db.session.commit()
-        return redirect("/productsadmin")
+        return redirect("/productsadmin", dictionary=dictionary)
     except:
         return ("An error occurred while deleting the product")
 
-        return redirect("/productsadmin")
+        return redirect("/productsadmin", dictionary=dictionary)
 
 
 @app.route('/productsadmin/<int:id>/update', methods=['POST', 'GET'])
 def updateproduct(id):
+    dictionary = Localization.return_dictionary(session['user_lang'])
     product = Products.query.get(id)
     if request.method == "POST":
         print("collect info for update")
@@ -377,7 +465,7 @@ def updateproduct(id):
 
             db.session.commit()
             print("commit")
-            return redirect('/admin')
+            return redirect('/admin', dictionary=dictionary)
 
         except:
             print("При редактировании account произошла ошибка")
@@ -385,25 +473,27 @@ def updateproduct(id):
             return "При редактировании account произошла ошибка"
 
     else:
-        return render_template("productupdate.html", product=product)
+        return render_template("productupdate.html", product=product, dictionary=dictionary)
 
 
 @app.route('/customersadmin/<int:id>/delete')
 def deletecustomer(id):
+    dictionary = Localization.return_dictionary(session['user_lang'])
     user = Users.query.get_or_404(id);
 
     try:
         db.session.delete(user)
         db.session.commit()
-        return redirect("/customersadmin")
+        return redirect("/customersadmin", dictionary=dictionary)
     except:
         return ("An error occurred while deleting the product")
 
-        return redirect("/customersadmin")
+        return redirect("/customersadmin", dictionary=dictionary)
 
 
 @app.route('/customersadmin/<int:id>/update', methods=['POST', 'GET'])
 def updateuser(id):
+    dictionary = Localization.return_dictionary(session['user_lang'])
     user = Users.query.get(id)
     if request.method == "POST":
         user.id = id
@@ -415,7 +505,7 @@ def updateuser(id):
         try:
 
             db.session.commit()
-            return redirect('/customersadmin')
+            return redirect('/customersadmin', dictionary=dictionary)
 
         except:
             print("При редактировании account произошла ошибка")
@@ -423,11 +513,12 @@ def updateuser(id):
             return "При редактировании account произошла ошибка"
 
     else:
-        return render_template("customersadminupdate.html", user=user)
+        return render_template("customersadminupdate.html", user=user, dictionary=dictionary)
 
 
 @app.route('/aboutuser/<int:id>/update', methods=['POST', 'GET'])
 def updateuseritself(id):
+    dictionary = Localization.return_dictionary(session['user_lang'])
     user = Users.query.get(id)
     if request.method == "POST":
         user.id = id
@@ -439,7 +530,7 @@ def updateuseritself(id):
         try:
 
             db.session.commit()
-            return redirect('/aboutuser')
+            return redirect('/aboutuser', dictionary=dictionary)
 
         except:
             print("При редактировании account произошла ошибка")
@@ -447,39 +538,43 @@ def updateuseritself(id):
             return "При редактировании account произошла ошибка"
 
     else:
-        return render_template("customersadminupdate.html", user=user)
+        return render_template("customersadminupdate.html", user=user, dictionary=dictionary)
 
 
 @app.route('/customersadmin')
 def customerssadmin():
+    dictionary = Localization.return_dictionary(session['user_lang'])
     users = Users.query.all();
 
-    return render_template("customersadmin.html", users=users)
+    return render_template("customersadmin.html", users=users, dictionary=dictionary)
 
 
 @app.route('/feedbacksadmin')
 def feedbacksadmin():
+    dictionary = Localization.return_dictionary(session['user_lang'])
     feedback = Feedback.query.all();
 
-    return render_template("feedbacksadmin.html", feedback=feedback)
+    return render_template("feedbacksadmin.html", feedback=feedback, dictionary=dictionary)
 
 
 @app.route('/feedbacksadmin/<int:id>/delete')
 def deletefeedback(id):
+    dictionary = Localization.return_dictionary(session['user_lang'])
     feedback = Feedback.query.get_or_404(id);
 
     try:
         db.session.delete(feedback)
         db.session.commit()
-        return redirect("/feedbacksadmin")
+        return redirect("/feedbacksadmin", dictionary=dictionary)
     except:
         return ("An error occurred while deleting the feedback")
 
-        return redirect("/feedbacksadmin")
+        return redirect("/feedbacksadmin", dictionary=dictionary)
 
 
 @app.route('/feedbacksadmin/<int:id>/reply', methods=['POST', 'GET'])
 def reply_feedback(id):
+    dictionary = Localization.return_dictionary(session['user_lang'])
     feedback = Feedback.query.get(id)
     customeremail = feedback.email
     if request.method == "POST":
@@ -499,7 +594,7 @@ def reply_feedback(id):
             print(message)
             db.session.add(reply)
             db.session.commit()
-            return redirect('/feedbacksadmin')
+            return redirect('/feedbacksadmin', dictionary=dictionary)
 
         except:
             print("При редактировании account произошла ошибка")
@@ -507,7 +602,7 @@ def reply_feedback(id):
             return "При редактировании account произошла ошибка"
 
     else:
-        return render_template("feedbackadminreply.html", feedback=feedback)
+        return render_template("feedbackadminreply.html", feedback=feedback, dictionary=dictionary)
 
 
 def sending_reply_customerfeedback(email, subject, message):
@@ -520,6 +615,7 @@ def sending_reply_customerfeedback(email, subject, message):
 @app.route('/aboutuser/<int:id>/update', methods=['POST', 'GET'])
 @app.route('/addproduct', methods=['POST', 'GET'])
 def addproduct():
+    dictionary = Localization.return_dictionary(session['user_lang'])
     if request.method == "POST":
 
         name = request.form['productname']
@@ -532,7 +628,7 @@ def addproduct():
 
         if file.filename == '':
             flash("No image selected for upload")
-            return render_template("addproduct.html")
+            return render_template("addproduct.html", dictionary=dictionary)
 
         if file and file.filename:
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
@@ -543,28 +639,31 @@ def addproduct():
         try:
             db.session.add(product)
             db.session.commit()
-            return redirect('/')
+            return redirect('/', dictionary=dictionary)
 
         except:
             print("При добавлении товара произошла ошибка")
 
             return "При добавлении товара произошла ошибка"
 
-    return render_template("addproduct.html")
+    return render_template("addproduct.html", dictionary=dictionary)
 
 
 @app.route('/signup')
 def signup_open():
-    return render_template("signup.html")
+    dictionary = Localization.return_dictionary(session['user_lang'])
+    return render_template("signup.html", dictionary=dictionary)
 
 
 @app.route('/aboutuser')
 def aboutuser():
-    return render_template("aboutuser.html")
+    dictionary = Localization.return_dictionary(session['user_lang'])
+    return render_template("aboutuser.html", dictionary=dictionary)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    dictionary = Localization.return_dictionary(session['user_lang'])
     if request.method == "POST":
         email = request.form['email']
         password = request.form['password']
@@ -582,17 +681,18 @@ def signup():
                 print(session['user_id'])
                 flash('You were successfully logged in')
 
-                render_template("index.html")
+                render_template("index.html", dictionary=dictionary)
             else:
                 flash('Login or password is not correct')
         else:
             flash('Login or password is not given')
 
-    return render_template("signup.html")
+    return render_template("signup.html", dictionary=dictionary)
 
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
+    dictionary = Localization.return_dictionary(session['user_lang'])
     if request.method == "POST":
         name = request.form['name']
         email = request.form['email']
@@ -608,7 +708,7 @@ def register():
             db.session.add(user)
             db.session.commit()
             sending_email(name, email)
-            return redirect('/signup')
+            return redirect('/signup', dictionary=dictionary)
 
         except:
 
@@ -616,7 +716,7 @@ def register():
 
             return "При регистрации произошла ошибка"
 
-    return render_template("register.html")
+    return render_template("register.html", dictionary=dictionary)
 
 
 def sending_email(name, email):
@@ -628,6 +728,7 @@ def sending_email(name, email):
 
 @app.route('/logout')
 def logout():
+    dictionary = Localization.return_dictionary(session['user_lang'])
     session.clear()
     session['user'] = "0"
     session['user_email'] = "0"
@@ -636,7 +737,9 @@ def logout():
 
     print("gjkexblkjc")
 
-    return redirect(url_for('menus'))
+    return redirect(url_for('menus'), dictionary=dictionary)
+
+
 
 
 if __name__ == '__main__':

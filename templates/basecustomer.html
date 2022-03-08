@@ -29,7 +29,8 @@
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  font-size: 17px;
+  font-size: 15px;
+    align: bottom;
 }
 
 .topnav a:hover {
@@ -160,37 +161,41 @@ div.content {
 <body>
 <br>
 <div class="container"  >
-<div class="d-flex flex-column flex-md-row align-items-center pb-3 mb-4 border-bottom " >
-      <a href="/" class="d-flex align-items-center text-light text-decoration-none">
-          <img  src = "/static/logobright.png" height="150px">
+<div class="d-flex flex-column flex-md-row align-items-top pb-3 mb-4 border-bottom "  >
+      <a href="/" class="d-flex align-items-center text-light text-decoration-none" style="vertical-align: bottom">
+          <img  src = "/static/logobright.png" height="90px">
 
 
       </a>
 
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<div class="container">
+<div class="container" style="vertical-align: bottom">
+ <div style = "text-align: right; ">
+
+     <a style="font-size: 14px; color: black; text-align: right " href="/{{ 'fi' }}">FI</a> <span>/</span><a style="font-size: 14px; color: black; text-align: right " href="/{{ 'en' }}">ENG</a><span>/</span><a style="font-size: 14px; color: black; text-align: right "  href="/{{ 'rus' }}">RUS</a>
+   </div>
 <div class="topnav" id="myTopnav" font-size="60px" >
-  <a href="/" >Art  Catering</a>
-  <a href="/menus">Menus</a>
-    <a href="/shop">Create</a>
-<a href="/calendar"> Calendar </a>
-    <a href="/signup">Sign Up</a>
-  <a href="/contact">Contact</a>
-  <a href="/about">About us</a>
+  <a href="/" >{{ dictionary['menu_artcatering']  }}</a>
+  <a href="/menus">{{ dictionary['menu_menus']  }}</a>
+    <a href="/shop">{{ dictionary['menu_create']  }}</a>
+<a href="/calendar"> {{ dictionary['menu_calendar']  }} </a>
+    <a href="/signup">{{ dictionary['menu_signup']  }}</a>
+  <a href="/contact">{{ dictionary['menu_contact']  }}</a>
+  <a href="/about">{{ dictionary['menu_aboutus']  }}</a>
 
     {% if session['user_email']== "elena.belousova@gmail.com" %}
-        <a href="/admin">Admin</a>
+        <a href="/admin">{{ dictionary['menu_admin']  }}</a>
 
 
 
      {% endif %}
     {% if session['user_email']!= "0" %}
     <a href="/aboutuser">{{ session['user'] }}</a>
-     <a href="/logout">Logout</a>
+     <a href="/logout">{{ dictionary['menu_logout']  }}</a>
      {% endif %}
 
-     <a class = "iLoveMyBasket" href = "/shoppingcard"><i class="fa fa-shopping-bag" aria-hidden="true" style="font-size:40px;color:red; position: relative; padding-top: 0px; padding-left: 0px;" ></i></a>
+     <a class = "iLoveMyBasket" href = "/shoppingcard"><i class="fa fa-shopping-bag" aria-hidden="true" style="font-size:20px;color:red; position: relative; padding-top: 0px; padding-left: 0px;" ></i></a>
   <a href="javascript:void(0);" class="icon" onclick="myFunction()">
     <i class="fa fa-bars"></i>
   </a>
