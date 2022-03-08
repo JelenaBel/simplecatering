@@ -37,6 +37,14 @@ class Localization:
         'menu_aboutus': 'About us',
         'menu_admin': 'Admin',
         'menu_logout': 'Logout',
+        'signin_title': 'Sign-up or register',
+        'signin_text1': 'Get 5% discount by making order via our web-page',
+        'signin_text2': 'For new customers only - Get additional 5% new customer welcome discount by registering on our web-site.',
+        'signin_button': 'Sign-in',
+        'signin_smalltext1': 'By clicking Sign up, you agree to the terms of use.',
+        'signin_smalltext2': "Don't have an account? ",
+        'signin_smalltext3': "Register here."
+
 
     }
 
@@ -50,6 +58,13 @@ class Localization:
         'menu_aboutus': 'Meistä',
         'menu_admin': 'Admin',
         'menu_logout': 'Ulos',
+        'signin_title': 'Kirjaudu tai rekisteröidy',
+        'signin_text1': 'Saat 5% alennuksen tekemällä tilauksen nettisivujemme kautta',
+        'signin_text2': 'Vain uusille asiakkaille - Saat ylimääräisen 5% uusien asiakkaiden tervetuloalennuksen rekisteröitymällä verkkosivuillemme.',
+        'signin_button': 'Kirjaudu',
+        'signin_smalltext1': 'Klikkaamalla Rekisteröidy hyväksyt käyttöehdot.',
+        'signin_smalltext2': 'Eikö sinulla ole tiliä? ',
+        'signin_smalltext3': 'Rekisteröidy täällä.'
 
     }
 
@@ -63,7 +78,13 @@ class Localization:
         'menu_aboutus': 'О нас',
         'menu_admin': 'Админ',
         'menu_logout': 'Выйти',
-
+        'signin_title': 'Kirjaudu tai rekisteröidy',
+        'signin_text1': 'Saat 5% alennuksen tekemällä tilauksen nettisivujemme kautta',
+        'signin_text2': 'Vain uusille asiakkaille - Saat ylimääräisen 5% uusien asiakkaiden tervetuloalennuksen rekisteröitymällä verkkosivuillemme.',
+        'signin_button': 'Kirjaudu',
+        'signin_smalltext1': 'Klikkaamalla Rekisteröidy hyväksyt käyttöehdot.',
+        'signin_smalltext2': 'Eikö sinulla ole tiliä? ',
+        'signin_smalltext3': 'Rekisteröidy täällä.'
     }
 
     dict = {'EN': dictionary_eng, 'FI': dictionary_fi, 'RU': dictionary_ru}
@@ -192,7 +213,7 @@ def indexpage():  # put application's code here
     if not session['user_lang']:
         session['user_lang'] = "EN"
     dictionary = Localization.return_dictionary(session['user_lang'])
-    return render_template("index.html", dictionary = dictionary)
+    return render_template("index.html", dictionary=dictionary)
 
 
 @app.route('/<string:lang>')
@@ -253,7 +274,7 @@ def addtocard(id):
         session['user_cart'] = product_string
 
 
-    return redirect("/shop", dictionary=dictionary)
+    return redirect("/shop")
 
 
 @app.route('/shoppingcard/<int:id>/delete')
@@ -279,7 +300,7 @@ def delete_item_shoppingcard(id):
     print("New_shopping_cart")
     print (new_shopping_cart)
 
-    return redirect("/shoppingcard", dictionary=dictionary)
+    return redirect("/shoppingcard")
 
 @app.route('/shoppingcard/<int:id>/minus')
 def minus_item_shoppingcard(id):
@@ -301,7 +322,7 @@ def minus_item_shoppingcard(id):
     print("New_shopping_cart")
     print (new_shopping_cart)
 
-    return redirect("/shoppingcard", dictionary=dictionary)
+    return redirect("/shoppingcard")
 
 @app.route('/shoppingcard/<int:id>/plus')
 def plus_item_shoppingcard(id):
@@ -309,7 +330,7 @@ def plus_item_shoppingcard(id):
     product_id = str(id)
     session['user_cart'] = session['user_cart']+ product_id +", "
 
-    return redirect("/shoppingcard", dictionary=dictionary)
+    return redirect("/shoppingcard")
 
 
 @app.route('/shoppingcard')
@@ -366,6 +387,64 @@ def shoppingcard():
         alv = total*0.24
         alv = float('{:.2f}'.format(alv))
         return render_template("shoppingcard.html", cart=cart_full, alv=alv, total=total, dictionary=dictionary)
+
+
+@app.route('/checkout/')
+def checkout():
+    dictionary = Localization.return_dictionary(session['user_lang'])
+    user_id = session['user_id']
+
+    if not session['user_cart']:
+        return render_template("shoppingcardempty.html", dictionary=dictionary)
+
+    else:
+        cart = session['user_cart'].split(", ")
+        cart.remove("")
+        cart.sort()
+        print(cart)
+
+        if len(cart) == 0:
+            return render_template("shoppingcardempty.html", dictionary=dictionary)
+
+        else:
+            products_in_card = {}
+            counter = 1
+
+            for i in range(len(cart)):
+                if i == len(cart)-1:
+                    products_in_card[cart[i]] = counter
+                    break
+
+                if cart[i] == cart[i+1]:
+                    counter = counter+1
+
+                else:
+                    products_in_card[cart[i]] = counter
+                    counter = 1
+
+        cart_full = ShoppingCard()
+        for key in products_in_card:
+            print(key)
+            product_id = key
+            if product_id!= "" and product_id!= " ":
+                quantity = products_in_card[product_id]
+                print(quantity)
+
+                product = Products.query.get_or_404(product_id)
+                print("Price :" )
+                print(product.price)
+
+                item_card = Item(product, quantity)
+                print (item_card.to_string())
+                item_card.get_item_total_price()
+                cart_full.additem(item_card)
+
+        total = cart_full.count_card_total()
+        alv = total*0.24
+        alv = float('{:.2f}'.format(alv))
+        return render_template("checkout.html", cart=cart_full, alv=alv, total=total, dictionary=dictionary)
+
+
 
 
 @app.route('/about')
