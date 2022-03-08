@@ -210,7 +210,7 @@ class ShoppingCard:
 @app.route('/')
 @app.route('/index')
 def indexpage():  # put application's code here
-    if not session['user_lang']:
+    if 'user_lang' in session:
         session['user_lang'] = "EN"
     dictionary = Localization.return_dictionary(session['user_lang'])
     return render_template("index.html", dictionary=dictionary)
