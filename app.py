@@ -249,18 +249,22 @@ def admin():  # put application's code here
     return render_template("adminmain.html", dictionary=dictionary)
 
 
-@app.route('/menus')
-def menus():  # put application's code here
-    dictionary = Localization.return_dictionary(session['user_lang'])
-    return render_template("menus.html", dictionary=dictionary)
-
-
 @app.route('/shop')
 def shopcreate():
     dictionary = Localization.return_dictionary(session['user_lang'])
     products = Products.query.all();
 
     return render_template("create.html", products=products, dictionary=dictionary)
+
+
+@app.route('/menus')
+def menus_show():
+    dictionary = Localization.return_dictionary(session['user_lang'])
+    products = db.session.query(Products).filter(Products.category == "Deserts").all()
+    print (len(products))
+
+
+    return render_template("menus.html", products=products, dictionary=dictionary)
 
 
 @app.route('/shop/<int:id>/readmore')
