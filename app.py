@@ -157,6 +157,41 @@ class Reply(db.Model):
         return f"<reply {self.id}>"
 
 
+class Orders(db.Model):
+    order_id = db.Column(db.Integer, primary_key=True)
+    customer_id = db.Column(db.Integer(), nullable=False)
+    status = db.Column(db.VARCHAR(200), nullable=False)
+    payment = db.Column(db.VARCHAR(1000), nullable=False)
+    order_date = db.Column(db.Date, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f"<reply {self.id}>"
+
+
+class OrderItems(db.Model):
+    order_id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer(), primary_key=True)
+    quantity = db.Column(db.VARCHAR(200), nullable=False)
+    price = db.Column(db.VARCHAR(1000), nullable=False)
+    updatetime = db.Column(db.Date, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f"<reply {self.id}>"
+
+
+class Customers(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    firstname = db.Column(db.VARCHAR(60), nullable=False)
+    lastname = db.Column(db.VARCHAR(100), nullable=False)
+    phone = db.Column(db.VARCHAR(30), nullable=False)
+    email = db.Column(db.VARCHAR(200), nullable=False)
+    street = db.Column(db.VARCHAR(200), nullable=False)
+    city = db.Column(db.VARCHAR(100), nullable=False)
+    zip_code = db.Column(db.VARCHAR(10), nullable=False)
+    updatetime = db.Column(db.Date, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f"<reply {self.id}>"
 db.create_all()
 
 
@@ -260,7 +295,7 @@ def shopcreate():
 @app.route('/menus')
 def menus_show():
     dictionary = Localization.return_dictionary(session['user_lang'])
-    products = db.session.query(Products).filter(Products.category == "Deserts").all()
+    products = db.session.query(Products).filter(Products.category == "Menus").all()
     print (len(products))
 
 
