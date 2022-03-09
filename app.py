@@ -229,12 +229,15 @@ def indexpage():  # put application's code here
 
 @app.route('/<string:lang>')
 def change_lang(lang):
-    if lang == 'fi':
+    if 'user_lang' in session:
+        if lang == 'fi':
+            session['user_lang'] = "FI"
+        elif lang == 'en':
+            session['user_lang'] = "EN"
+        elif lang == 'ru':
+            session['user_lang'] = "RU"
+    else:
         session['user_lang'] = "FI"
-    elif lang == 'en':
-        session['user_lang'] = "EN"
-    elif lang == 'ru':
-        session['user_lang'] = "RU"
 
     dictionary = Localization.return_dictionary(session['user_lang'])
 
@@ -729,7 +732,7 @@ def addproduct():
         try:
             db.session.add(product)
             db.session.commit()
-            return redirect('/', dictionary=dictionary)
+            return redirect('/admin')
 
         except:
             print("При добавлении товара произошла ошибка")
@@ -818,16 +821,17 @@ def sending_email(name, email):
 
 @app.route('/logout')
 def logout():
-    dictionary = Localization.return_dictionary(session['user_lang'])
+
     session.clear()
     session['user'] = "0"
     session['user_email'] = "0"
     session['user_cart'] = ""
 
 
+
     print("gjkexblkjc")
 
-    return redirect(url_for('menus'), dictionary=dictionary)
+    return redirect("/")
 
 
 
