@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title%}
+Menus
+{% endblock %}
+
+{% block body%}
+    <style>
+
+* {
+  box-sizing: border-box;
+}
+</style>
+     <style>
+
+* {
+  box-sizing: border-box;
+}
+
+#myInput {
+
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 20px 12px 20px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
+#myTable {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+#myTable th, #myTable td {
+  text-align: left;
+  padding: 12px;
+}
+
+#myTable tr {
+  border-bottom: 1px solid #ddd;
+}
+
+#myTable tr.header, #myTable tr:hover {
+  background-color: #f1f1f1;
+}
+</style>
+    <body>
+
+
+<div class="col-lg-10 col-md-12 mx-auto">
+
+<div class="content">
+    <div class = "container">
+
+
+
+<h3>My orders</h3>
+
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+
+<table class ="table-responsive" id="myTable" style ="width: auto">
+  <tr class="header">
+     <th>Order ID</th>
+      <th>Customer ID</th>
+    <th >Status</th>
+      <th>Payment</th>
+      <th>Shipping address</th>
+      <th>City</th>
+      <th>ZIP</th>
+      <th> Date</th>
+  </tr>
+    {%  for el in orders %}
+  <tr>
+      <td>{{ el.order_id }}</td>
+    <td>{{ el.customer_id }}</td>
+    <td>{{ el.status }}</td>
+      <td>{{el.payment}}</td>
+      <td>{{ el.shipping_address }}€ /per person</td>
+      <td> {{ el.shipping_city }}</td>
+      <td>{{ el.shipping_zip_code}}€ /per person</td>
+      <td> {{ el.order_date}}</td>
+      <td><a href = "/productsadmin/{{ el.id }}/update" class = "btn btn-primary" style = "font-size: 14px"> Update</a></td>
+      <td> <a href = "/productsadmin/{{ el.id }}/delete" class = "btn btn-danger" style = "font-size: 14px"> Delete</a></td>
+  </tr>
+  {% endfor %}
+</table>
+
+<script>
+function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[2];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+</script>
+
+</div>
+</div>
+</div>
+    </body>
+
+{% endblock %}

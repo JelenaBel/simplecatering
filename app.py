@@ -523,11 +523,11 @@ def checkout():
                        order_date= order_date)
 
         try:
-             db.session.add(user_update)
-             db.session.commit()
-             db.session.add(order)
-             db.session.commit()
-             return redirect('/admin')
+            db.session.add(user_update)
+            db.session.commit()
+            db.session.add(order)
+            db.session.commit()
+            return redirect('/admin')
 
         except:
             print("При добавлении товара произошла ошибка")
@@ -587,6 +587,13 @@ def sending_email_feedbackform(name, email):
 def admin_orders():  # put application's code here
     dictionary = Localization.return_dictionary(session['user_lang'])
     return render_template("orders.html", dictionary=dictionary)
+
+@app.route('/ordersadmin')
+def ordersadmin():
+    dictionary = Localization.return_dictionary(session['user_lang'])
+    orders = Orders.query.all();
+
+    return render_template("ordersadmin.html", orders=orders, dictionary=dictionary)
 
 
 @app.route('/productsadmin')
