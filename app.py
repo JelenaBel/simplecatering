@@ -8,7 +8,7 @@ import os
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://linlbopoiknkri:82beb352c58d03e9e580c00f5d8434b56bc4ae9b4868d08106641df8380f1a53@ec2-54-77-90-39.eu-west-1.compute.amazonaws.com:5432/dcaur7p267os7d'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://zishacwremgawh:68eaa0949c7b3969d9aabae22fb8e5cebff7ef72fff0b7d05a43fdd8eda8870b@ec2-52-213-119-221.eu-west-1.compute.amazonaws.com:5432/dcc1g6r4dsg5us'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
@@ -818,11 +818,6 @@ def addproduct():
 
     return render_template("addproduct.html", dictionary=dictionary)
 
-
-@app.route('/signup')
-def signup_open():
-    dictionary = Localization.return_dictionary(session['user_lang'])
-    return render_template("signup.html", dictionary=dictionary)
 
 
 @app.route('/aboutuser')
