@@ -185,7 +185,7 @@ class OrderItems(db.Model):
     def __repr__(self):
         return f"<reply {self.id}>"
 
-Users.__table__.drop()
+
 db.create_all()
 
 
