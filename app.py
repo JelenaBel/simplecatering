@@ -87,24 +87,21 @@ class Localization:
         'signin_smalltext3': 'Rekisteröidy täällä.'
     }
 
-    dict = {'EN': dictionary_eng, 'FI': dictionary_fi, 'RU': dictionary_ru}
+    dict = {'en': dictionary_eng, 'fi': dictionary_fi, 'ru': dictionary_ru}
 
     def return_dictionary(lang):
         if 'user_lang' in session:
-            if lang == 'FI':
-                dictionary = Localization.dict['FI']
-            elif lang == 'EN':
-                dictionary = Localization.dict['EN']
-            elif lang == 'RU':
-                dictionary = Localization.dict['RU']
+            if lang == 'fi':
+                dictionary = Localization.dict['fi']
+            elif lang == 'en':
+                dictionary = Localization.dict['en']
+            elif lang == 'ru':
+                dictionary = Localization.dict['en']
         else:
-            session["user_lang"] = 'FI'
-            if lang == 'FI':
-                dictionary = Localization.dict['FI']
-            elif lang == 'EN':
-                dictionary = Localization.dict['EN']
-            elif lang == 'RU':
-                dictionary = Localization.dict['RU']
+            session["user_lang"] = 'en'
+
+            dictionary = Localization.dict['en']
+
         return dictionary
 
 
@@ -248,11 +245,22 @@ class ShoppingCard:
 @app.route('/')
 @app.route('/index')
 def indexpage():  # put application's code here
+
+    dictionary = Localization.dict['en']
+
     if 'user_lang' in session:
-        dictionary = Localization.return_dictionary(session['user_lang'])
+        if 'user_lang' == "en":
+            dictionary = Localization.return_dictionary('en')
+        elif 'user_lang' == "fi":
+            dictionary = Localization.return_dictionary('fi')
+        elif 'user_lang' == "ru":
+            dictionary = Localization.return_dictionary('ru')
+            return render_template("index.html", dictionary=dictionary)
     else:
-        session['user_lang'] = "EN"
-        dictionary = Localization.return_dictionary(session['user_lang'])
+        session['user_lang'] = "en"
+        dictionary = Localization.return_dictionary('en')
+        return render_template("index.html", dictionary=dictionary)
+
     return render_template("index.html", dictionary=dictionary)
 
 
@@ -260,17 +268,18 @@ def indexpage():  # put application's code here
 def change_lang(lang):
     if 'user_lang' in session:
         if lang == 'fi':
-            session['user_lang'] = "FI"
+            session['user_lang'] = "fi"
         elif lang == 'en':
-            session['user_lang'] = "EN"
+            session['user_lang'] = "en"
         elif lang == 'ru':
-            session['user_lang'] = "RU"
+            session['user_lang'] = "ru"
     else:
-        session['user_lang'] = "FI"
+        session['user_lang'] = "fi"
 
     dictionary = Localization.return_dictionary(session['user_lang'])
 
     return render_template("index.html", dictionary = dictionary)
+
 
 @app.route('/admin')
 def admin():  # put application's code here
@@ -296,6 +305,45 @@ def menus_show():
     return render_template("menus.html", products=products, dictionary=dictionary)
 
 
+@app.route('/mains')
+def mains_dishes():
+    dictionary = Localization.return_dictionary(session['user_lang'])
+    products = db.session.query(Products).filter(Products.category == "Mains").all()
+
+    return render_template("mains.html", products=products, dictionary=dictionary)
+
+
+@app.route('/sides')
+def sides():
+    dictionary = Localization.return_dictionary(session['user_lang'])
+    products = db.session.query(Products).filter(Products.category == "Sides").all()
+
+    return render_template("sides.html", products=products, dictionary=dictionary)
+
+
+@app.route('/salads')
+def salads():
+    dictionary = Localization.return_dictionary(session['user_lang'])
+    products = db.session.query(Products).filter(Products.category == "Salads").all()
+
+    return render_template("salads.html", products=products, dictionary=dictionary)
+
+
+@app.route('/bites')
+def bites():
+    dictionary = Localization.return_dictionary(session['user_lang'])
+    products = db.session.query(Products).filter(Products.category == "Bites").all()
+
+    return render_template("bites.html", products=products, dictionary=dictionary)
+
+
+@app.route('/deserts')
+def deserts():
+    dictionary = Localization.return_dictionary(session['user_lang'])
+    products = db.session.query(Products).filter(Products.category == "Deserts").all()
+
+    return render_template("deserts.html", products=products, dictionary=dictionary)
+
 @app.route('/shop/<int:id>/readmore')
 def readmore(id):
     dictionary = Localization.return_dictionary(session['user_lang'])
@@ -307,8 +355,10 @@ def readmore(id):
 def addtocard(id):
     dictionary = Localization.return_dictionary(session['user_lang'])
     product = Products.query.get_or_404(id)
-
-    user_id = session['user_id']
+    if 'user_id' in session:
+        user_id = session['user_id']
+    else:
+       return render_template("pleaseregister.html", dictionary = dictionary)
 
     if 'user_cart' in session:
         product_string = str(product.id) + ", "
@@ -337,7 +387,7 @@ def delete_item_shoppingcard(id):
            continue
 
         else:
-            new_cart.add(el)
+            new_cart.append(el)
 
     new_shopping_cart = ""
     for el in new_cart:
@@ -383,8 +433,9 @@ def plus_item_shoppingcard(id):
 @app.route('/shoppingcard')
 def shoppingcard():
     dictionary = Localization.return_dictionary(session['user_lang'])
+
     user_id = session['user_id']
-    print (session['user_cart'])
+
     if not session['user_cart']:
         return render_template("shoppingcardempty.html", dictionary=dictionary)
 
@@ -527,7 +578,7 @@ def checkout():
             db.session.commit()
             db.session.add(order)
             db.session.commit()
-            return redirect('/admin')
+            return redirect('/')
 
         except:
             print("При добавлении товара произошла ошибка")
