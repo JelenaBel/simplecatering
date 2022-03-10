@@ -132,9 +132,16 @@ Contact
                 Please enter a valid email address for shipping updates.
               </div>
             </div>
+              <div class="col-12">
+              <label for="phone" class="form-label">Phone <span class="text-muted">(Optional)</span></label>
+              <input type="text" class="form-control" id="phone" placeholder="Phone">
+              <div class="invalid-feedback">
+                Please enter a valid email address for shipping updates.
+              </div>
+            </div>
 
             <div class="col-12">
-              <label for="address" class="form-label">Address</label>
+              <label for="address" class="form-label">Billing address</label>
               <input type="text" class="form-control" id="address" placeholder="1234 Main St" required>
               <div class="invalid-feedback">
                 Please enter your shipping address.
@@ -147,26 +154,24 @@ Contact
             </div>
 
             <div class="col-md-5">
-              <label for="country" class="form-label">Country</label>
+              <label for="country" class="form-label">City</label>
               <select class="form-select" id="country" required>
                 <option value="">Choose...</option>
-                <option>United States</option>
+                <option>Helsinki</option>
+                <option>Vantaa</option>
+                <option>Espoo</option>
+                <option>Hyvinkää</option>
+                <option>Kauniainen</option>
+                <option>Järvenpää</option>
+                <option>Kerava</option>
+                  <option>Tuusula</option>
               </select>
               <div class="invalid-feedback">
-                Please select a valid country.
+                Please select a valid city.
               </div>
             </div>
 
-            <div class="col-md-4">
-              <label for="state" class="form-label">State</label>
-              <select class="form-select" id="state" required>
-                <option value="">Choose...</option>
-                <option>California</option>
-              </select>
-              <div class="invalid-feedback">
-                Please provide a valid state.
-              </div>
-            </div>
+
 
             <div class="col-md-3">
               <label for="zip" class="form-label">Zip</label>
@@ -177,17 +182,49 @@ Contact
             </div>
           </div>
 
+            <div class="col-12">
+              <label for="shipping_address" class="form-label">Shipping address</label>
+              <input type="text" class="form-control" id="shipping_address" placeholder="1234 Main St" required>
+              <div class="invalid-feedback">
+                Please enter your shipping address.
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label for="shipping_address2" class="form-label">Address 2 <span class="text-muted">(Optional)</span></label>
+              <input type="text" class="form-control" id="shipping_address2" placeholder="Apartment or suite">
+            </div>
+
+            <div class="col-md-5">
+              <label for="shipping_city" class="form-label">City</label>
+              <select class="form-select" id="shipping_city" required>
+                <option value="">Choose...</option>
+                <option>Helsinki</option>
+                <option>Vantaa</option>
+                <option>Espoo</option>
+                <option>Hyvinkää</option>
+                <option>Kauniainen</option>
+                <option>Järvenpää</option>
+                <option>Kerava</option>
+                  <option>Tuusula</option>
+              </select>
+              <div class="invalid-feedback">
+                Please select a valid city.
+              </div>
+            </div>
+
+
+
+            <div class="col-md-3">
+              <label for="shipping_zip" class="form-label">Zip</label>
+              <input type="text" class="form-control" id="shipping_zip" placeholder="" required>
+              <div class="invalid-feedback">
+                Zip code required.
+              </div>
+            </div>
+
           <hr class="my-4">
 
-          <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="same-address">
-            <label class="form-check-label" for="same-address">Shipping address is the same as my billing address</label>
-          </div>
-
-          <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="save-info">
-            <label class="form-check-label" for="save-info">Save this information for next time</label>
-          </div>
 
           <hr class="my-4">
 

@@ -126,6 +126,10 @@ class Users(db.Model):
     name = db.Column(db.String(100), primary_key=False)
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100), nullable=True)
+    phone = db.Column(db.VARCHAR(30))
+    billing_address = db.Column(db.VARCHAR(200),)
+    billing_city = db.Column(db.VARCHAR(200))
+    billing_zip_code = db.Column(db.VARCHAR(200))
     updatetime = db.Column(db.Date, default=datetime.utcnow)
 
     def __repr__(self):
@@ -162,6 +166,9 @@ class Orders(db.Model):
     customer_id = db.Column(db.Integer(), nullable=False)
     status = db.Column(db.VARCHAR(200), nullable=False)
     payment = db.Column(db.VARCHAR(1000), nullable=False)
+    shipping_address = db.Column(db.VARCHAR(200), nullable=False)
+    shipping_city = db.Column(db.VARCHAR(200), nullable=False)
+    shipping_zip_code = db.Column(db.VARCHAR(200), nullable=False)
     order_date = db.Column(db.Date, default=datetime.utcnow)
 
     def __repr__(self):
@@ -179,19 +186,6 @@ class OrderItems(db.Model):
         return f"<reply {self.id}>"
 
 
-class Customers(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    firstname = db.Column(db.VARCHAR(60), nullable=False)
-    lastname = db.Column(db.VARCHAR(100), nullable=False)
-    phone = db.Column(db.VARCHAR(30), nullable=False)
-    email = db.Column(db.VARCHAR(200), nullable=False)
-    street = db.Column(db.VARCHAR(200), nullable=False)
-    city = db.Column(db.VARCHAR(100), nullable=False)
-    zip_code = db.Column(db.VARCHAR(10), nullable=False)
-    updatetime = db.Column(db.Date, default=datetime.utcnow)
-
-    def __repr__(self):
-        return f"<reply {self.id}>"
 db.create_all()
 
 
@@ -390,7 +384,7 @@ def plus_item_shoppingcard(id):
 def shoppingcard():
     dictionary = Localization.return_dictionary(session['user_lang'])
     user_id = session['user_id']
-
+    print (session['user_cart'])
     if not session['user_cart']:
         return render_template("shoppingcardempty.html", dictionary=dictionary)
 
@@ -442,8 +436,9 @@ def shoppingcard():
         return render_template("shoppingcard.html", cart=cart_full, alv=alv, total=total, dictionary=dictionary)
 
 
-@app.route('/checkout/')
+@app.route('/checkout/', methods=['POST', 'GET'])
 def checkout():
+
     dictionary = Localization.return_dictionary(session['user_lang'])
     user_id = session['user_id']
 
@@ -495,7 +490,50 @@ def checkout():
         total = cart_full.count_card_total()
         alv = total*0.24
         alv = float('{:.2f}'.format(alv))
-        return render_template("checkout.html", cart=cart_full, alv=alv, total=total, dictionary=dictionary)
+
+    if request.method == "POST":
+
+        name = request.form['firstName']
+        lastname = request.form['lastName']
+        email = request.form['email']
+        phone = request.form['phone']
+        billing_address = request.form['address']
+        billing_address2 = request.form['address2']
+        billing_city = request.form['country']
+        billing_zip_code = request.form['zip']
+        shipping_address = request.form['shipping_address']
+        shipping_address2 = request.form['shipping_address2']
+        shipping_city = request.form['shipping_city']
+        shipping_zip = request.form['shipping_zip']
+        name = name + " " + lastname
+        billing_address = billing_address + ', '+billing_address2
+        numberid = session['user_id']
+        order_id = random.randint(100000, 999999)
+        order_date = datetime.utcnow()
+
+        print(numberid)
+        user = Products.query.get_or_404(numberid)
+        password = user.password
+
+        user_update = Users(id=numberid, name=name, email = email, password=password, phone=phone, billing_address=billing_address,
+                            billing_city=billing_city,billing_zip_code = billing_zip_code)
+
+        order = Orders(order_id= order_id, customer_id =  numberid, status = "accepted", payment = "paid",
+                       shipping_address = shipping_address, shipping_city = shipping_city, shipping_zip_code =shipping_zip,
+                       order_date= order_date)
+
+        try:
+             db.session.add(user_update)
+             db.session.commit()
+             db.session.add(order)
+             db.session.commit()
+             return redirect('/admin')
+
+        except:
+            print("При добавлении товара произошла ошибка")
+
+            return "При добавлении товара произошла ошибка"
+    return render_template("checkout.html", cart=cart_full, alv=alv, total=total, dictionary=dictionary)
 
 
 
