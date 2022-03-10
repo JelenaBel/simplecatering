@@ -127,7 +127,7 @@ class Users(db.Model):
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100), nullable=True)
     phone = db.Column(db.VARCHAR(30))
-    billing_address = db.Column(db.VARCHAR(200),)
+    billing_address = db.Column(db.VARCHAR(200))
     billing_city = db.Column(db.VARCHAR(200))
     billing_zip_code = db.Column(db.VARCHAR(200))
     updatetime = db.Column(db.Date, default=datetime.utcnow)
@@ -185,7 +185,7 @@ class OrderItems(db.Model):
     def __repr__(self):
         return f"<reply {self.id}>"
 
-
+Users.__table__.drop()
 db.create_all()
 
 
