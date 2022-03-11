@@ -61,7 +61,17 @@ Menus
 <h3>My orders</h3>
 
 <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for order ID.." title="Type in a order ID">
-
+<table class ="table-responsive" id="myTable" style ="width: auto">
+  <tr class="header" style = "font-weight: bold">
+     <th>Total ALV</th>
+      <th>Total</th>
+  </tr>
+<tr>
+    <td>{{totalalv }}€</td>
+      <td>{{total }}€ </td>
+</tr>
+</table>
+    <br>
 
 <table class ="table-responsive" id="myTable" style ="width: auto">
   <tr class="header">
@@ -102,7 +112,7 @@ function myFunction() {
   table = document.getElementById("myTable");
   tr = table.getElementsByTagName("tr");
   for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[3];
+    td = tr[i].getElementsByTagName("td")[0];
     if (td) {
       txtValue = td.textContent || td.innerText;
       if (txtValue.toUpperCase().indexOf(filter) > -1) {
