@@ -716,7 +716,7 @@ def feedback():
             db.session.add(contact1)
             db.session.commit()
             sending_email_feedbackform(name, email)
-            return redirect('/', dictionary=dictionary)
+            return redirect('/')
 
         except:
 
@@ -773,11 +773,11 @@ def deleteproduct(id):
     try:
         db.session.delete(product)
         db.session.commit()
-        return redirect("/productsadmin", dictionary=dictionary)
+        return redirect("/productsadmin")
     except:
         return ("An error occurred while deleting the product")
 
-        return redirect("/productsadmin", dictionary=dictionary)
+        return redirect("/productsadmin")
 
 
 @app.route('/productsadmin/<int:id>/update', methods=['POST', 'GET'])
@@ -803,7 +803,7 @@ def updateproduct(id):
 
             db.session.commit()
             print("commit")
-            return redirect('/admin', dictionary=dictionary)
+            return redirect('/admin')
 
         except:
             print("При редактировании account произошла ошибка")
@@ -822,11 +822,11 @@ def deletecustomer(id):
     try:
         db.session.delete(user)
         db.session.commit()
-        return redirect("/customersadmin", dictionary=dictionary)
+        return redirect("/customersadmin")
     except:
         return ("An error occurred while deleting the product")
 
-        return redirect("/customersadmin", dictionary=dictionary)
+        return redirect("/customersadmin")
 
 
 @app.route('/customersadmin/<int:id>/update', methods=['POST', 'GET'])
@@ -843,7 +843,7 @@ def updateuser(id):
         try:
 
             db.session.commit()
-            return redirect('/customersadmin', dictionary=dictionary)
+            return redirect('/customersadmin')
 
         except:
             print("При редактировании account произошла ошибка")
@@ -868,7 +868,7 @@ def updateuseritself(id):
         try:
 
             db.session.commit()
-            return redirect('/aboutuser', dictionary=dictionary)
+            return redirect('/aboutuser')
 
         except:
             print("При редактировании account произошла ошибка")
@@ -903,11 +903,11 @@ def deletefeedback(id):
     try:
         db.session.delete(feedback)
         db.session.commit()
-        return redirect("/feedbacksadmin", dictionary=dictionary)
+        return redirect("/feedbacksadmin")
     except:
         return ("An error occurred while deleting the feedback")
 
-        return redirect("/feedbacksadmin", dictionary=dictionary)
+        return redirect("/feedbacksadmin")
 
 
 @app.route('/feedbacksadmin/<int:id>/reply', methods=['POST', 'GET'])
@@ -932,7 +932,7 @@ def reply_feedback(id):
             print(message)
             db.session.add(reply)
             db.session.commit()
-            return redirect('/feedbacksadmin', dictionary=dictionary)
+            return redirect('/feedbacksadmin')
 
         except:
             print("При редактировании account произошла ошибка")
@@ -950,7 +950,7 @@ def sending_reply_customerfeedback(email, subject, message):
     return "Message sent!"
 
 
-@app.route('/aboutuser/<int:id>/update', methods=['POST', 'GET'])
+
 @app.route('/addproduct', methods=['POST', 'GET'])
 def addproduct():
     dictionary = Localization.return_dictionary(session['user_lang'])
@@ -1041,7 +1041,7 @@ def register():
             db.session.add(user)
             db.session.commit()
             sending_email(name, email)
-            return redirect('/signup', dictionary=dictionary)
+            return redirect('/signup')
 
         except:
 
