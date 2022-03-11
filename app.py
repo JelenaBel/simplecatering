@@ -359,14 +359,14 @@ def deserts():
 @app.route('/shop/<int:id>/readmore')
 def readmore(id):
     dictionary = Localization.return_dictionary(session['user_lang'])
-    product = Products.query.get_or_404(id)
+    product = Products.query.get(id)
     return render_template("productpage.html", product=product, dictionary=dictionary)
 
 
 @app.route('/shop/<int:id>/addtocard')
 def addtocard(id):
     dictionary = Localization.return_dictionary(session['user_lang'])
-    product = Products.query.get_or_404(id)
+    product = Products.query.get(id)
     if 'user_id' in session:
         user_id = session['user_id']
     else:
@@ -487,7 +487,7 @@ def shoppingcard():
                 quantity = products_in_card[product_id]
                 print(quantity)
 
-                product = Products.query.get_or_404(product_id)
+                product = Products.query.get(product_id)
                 print("Price :" )
                 print(product.price)
 
@@ -537,7 +537,7 @@ def pay():
             quantity = products_in_card[product_id]
             print(quantity)
 
-            product = Products.query.get_or_404(product_id)
+            product = Products.query.get(product_id)
             print("Price :")
             print(product.price)
 
@@ -573,7 +573,7 @@ def pay():
         product_id = key
         if product_id != "" and product_id != " ":
             quantity = products_in_card[product_id]
-            product = Products.query.get_or_404(product_id)
+            product = Products.query.get_or(product_id)
             price = product.price * quantity
             orderitem = OrderItems(order_id=order_id, product_id=product_id, quantity=quantity, price=price,
                                    updatetime=order_date)
@@ -588,7 +588,7 @@ def pay():
                 return "При добавлении списка товаров произошла ошибка"
 
     print(numberid)
-    user: Users = Users.query.get_or_404(numberid)
+    user: Users = Users.query.get(numberid)
     password = user.password
     user.phone = phone
     user.billing_address=billing_address
@@ -668,7 +668,7 @@ def checkout():
                 quantity = products_in_card[product_id]
                 print(quantity)
 
-                product = Products.query.get_or_404(product_id)
+                product = Products.query.get(product_id)
                 print("Price :" )
                 print(product.price)
 
@@ -768,7 +768,7 @@ def productsadmin():
 @app.route('/productsadmin/<int:id>/delete')
 def deleteproduct(id):
     dictionary = Localization.return_dictionary(session['user_lang'])
-    product = Products.query.get_or_404(id);
+    product = Products.query.get(id);
 
     try:
         db.session.delete(product)
@@ -817,7 +817,7 @@ def updateproduct(id):
 @app.route('/customersadmin/<int:id>/delete')
 def deletecustomer(id):
     dictionary = Localization.return_dictionary(session['user_lang'])
-    user = Users.query.get_or_404(id);
+    user = Users.query.get(id);
 
     try:
         db.session.delete(user)
@@ -898,7 +898,7 @@ def feedbacksadmin():
 @app.route('/feedbacksadmin/<int:id>/delete')
 def deletefeedback(id):
     dictionary = Localization.return_dictionary(session['user_lang'])
-    feedback = Feedback.query.get_or_404(id);
+    feedback = Feedback.query.get(id);
 
     try:
         db.session.delete(feedback)
