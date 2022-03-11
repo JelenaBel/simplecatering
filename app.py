@@ -293,12 +293,6 @@ def change_lang(lang):
     return render_template("index.html", dictionary = dictionary)
 
 
-@app.route('/admin')
-def admin():  # put application's code here
-    dictionary = Localization.return_dictionary(session['user_lang'])
-    return render_template("adminmain.html", dictionary=dictionary)
-
-
 @app.route('/shop')
 def shopcreate():
     dictionary = Localization.return_dictionary(session['user_lang'])
@@ -742,9 +736,10 @@ def admin_orders():  # put application's code here
 @app.route('/ordersadmin')
 def ordersadmin():
     dictionary = Localization.return_dictionary(session['user_lang'])
-    orders = Orders.query.all();
+    orders = Orders.query.all()
 
     return render_template("ordersadmin.html", orders=orders, dictionary=dictionary)
+
 
 @app.route('/paymentsadmin')
 def paymentsadmin():
