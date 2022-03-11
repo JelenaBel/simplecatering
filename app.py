@@ -573,7 +573,7 @@ def pay():
         product_id = key
         if product_id != "" and product_id != " ":
             quantity = products_in_card[product_id]
-            product = Products.query.get_or(product_id)
+            product = Products.query.get(product_id)
             price = product.price * quantity
             orderitem = OrderItems(order_id=order_id, product_id=product_id, quantity=quantity, price=price,
                                    updatetime=order_date)
