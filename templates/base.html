@@ -34,7 +34,7 @@
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  font-size: 15px;
+  font-size: 17px;
 }
 
 .topnav a:hover {
@@ -189,10 +189,9 @@ div.content {
   <a href="/" >{{ dictionary['menu_artcatering']  }}</a>
   <a href="/menus">{{ dictionary['menu_menus']  }}</a>
     <a href="/shop">{{ dictionary['menu_create']  }}</a>
-<a href="/calendar"> {{ dictionary['menu_calendar']  }} </a>
     <a href="/signup">{{ dictionary['menu_signup']  }}</a>
   <a href="/contact">{{ dictionary['menu_contact']  }}</a>
-  <a href="/about">{{ dictionary['menu_aboutus']  }}</a>
+
 
     {% if session['user_email']== "elena.belousova@gmail.com" %}
         <a href="/admin">{{ dictionary['menu_admin']  }}</a>
@@ -229,15 +228,13 @@ function myFunction() {
 
 <div class="sidebar">
 
-              <a href="Dashboard"><i class="fa fa-fw fa-home"></i>  Dashboard</a>
-  <a href="/ordersadmin"><i class="fa fa-fw fa-bell"> </i>  Orders</a>
-  <a href="#Payments"><i class="fa fa-fw fa-money"> </i>  Payments</a>
-    <a href="#Calendar"><i class="fa fa-fw fa-calendar"></i>  Calendar</a>
-  <a href="/customersadmin"><i class="fa fa-fw fa-user"></i>  Clients</a>
-  <a href="/productsadmin"><i class="fa fa-fw fa-database"></i>  Products</a>
 
+  <a href="/ordersadmin"><i class="fa fa-fw fa-bell"> </i>  Orders</a>
+  <a href="/paymentsadmin"><i class="fa fa-fw fa-money"> </i>  Payments</a>
+      <a href="/customersadmin"><i class="fa fa-fw fa-user"></i>  Clients</a>
+  <a href="/productsadmin"><i class="fa fa-fw fa-database"></i>  Products</a>
   <a href="/feedbacksadmin"><i class="fa fa-fw fa-envelope"></i>  Feedback</a>
-    <a href="#Send NewsLetter"><i class="fa fa-fw fa-at"></i>  Send NewsLetter</a>
+
 </div>
     </div>
     </div>

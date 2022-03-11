@@ -60,31 +60,38 @@ Menus
 
 <h3>My orders</h3>
 
-<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for order ID.." title="Type in a order ID">
+
 
 <table class ="table-responsive" id="myTable" style ="width: auto">
   <tr class="header">
      <th>Order ID</th>
       <th>Customer ID</th>
-    <th >Status</th>
-      <th>Payment</th>
-      <th>Shipping address</th>
-      <th>City</th>
-      <th>ZIP</th>
-      <th> Date</th>
-  </tr>
-    {%  for el in orders %}
+    <th >ALV</th>
+      <th>Total</th>
+      <th>Status</th>
+      <th>Date</th>
+
+
+{%  for el in payments %}
   <tr>
       <td>{{ el.order_id }}</td>
     <td>{{ el.customer_id }}</td>
-    <td>{{ el.status }}</td>
-      <td>{{el.payment}}</td>
-      <td>{{ el.shipping_address }}</td>
-      <td> {{ el.shipping_city }}</td>
-      <td>{{ el.shipping_zip_code}}</td>
-      <td> {{ el.order_date}}</td>
+    <td>{{ el.order_alv }} € </td>
+      <td>{{el.order_total}} € </td>
+      <td>{{ el.payment_status}}</td>
+      <td> {{ el.updatetime }}</td>
+
       </tr>
   {% endfor %}
+ <tr>
+     <td>Total</td>
+    <td></td>
+    <td> </td>
+      <td>{{totalalv }}€</td>
+      <td>{{total }}€ </td>
+      <td> </td>
+</tr>
 </table>
 
 <script>
@@ -95,7 +102,7 @@ function myFunction() {
   table = document.getElementById("myTable");
   tr = table.getElementsByTagName("tr");
   for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[2];
+    td = tr[i].getElementsByTagName("td")[3];
     if (td) {
       txtValue = td.textContent || td.innerText;
       if (txtValue.toUpperCase().indexOf(filter) > -1) {

@@ -183,6 +183,18 @@ class OrderItems(db.Model):
         return f"<reply {self.id}>"
 
 
+class Payments(db.Model):
+    order_id = db.Column(db.Integer, primary_key=True)
+    customer_id = db.Column(db.Integer, nullable=False)
+    order_total = db.Column(db.Float(), nullable=False)
+    order_alv = db.Column(db.Float(), nullable=False)
+    payment_status = db.Column(db.VARCHAR(200), nullable=False)
+    updatetime = db.Column(db.Date, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f"<reply {self.id}>"
+
+
 db.create_all()
 
 
@@ -434,7 +446,10 @@ def plus_item_shoppingcard(id):
 def shoppingcard():
     dictionary = Localization.return_dictionary(session['user_lang'])
 
-    user_id = session['user_id']
+    if 'user_id' in session:
+        user_id = session['user_id']
+    else:
+        return render_template("pleaseregister.html", dictionary=dictionary)
 
     if not session['user_cart']:
         return render_template("shoppingcardempty.html", dictionary=dictionary)
@@ -487,11 +502,135 @@ def shoppingcard():
         return render_template("shoppingcard.html", cart=cart_full, alv=alv, total=total, dictionary=dictionary)
 
 
-@app.route('/checkout/', methods=['POST', 'GET'])
-def checkout():
-
+@app.route('/pay', methods=["POST"])
+def pay():
     dictionary = Localization.return_dictionary(session['user_lang'])
-    user_id = session['user_id']
+    order_id = random.randint(100000, 999999)
+    cart = session['user_cart'].split(", ")
+    cart.remove("")
+    cart.sort()
+    print(cart)
+
+    if len(cart) == 0:
+        return render_template("shoppingcardempty.html", dictionary=dictionary)
+
+    else:
+        products_in_card = {}
+        counter = 1
+
+        for i in range(len(cart)):
+            if i == len(cart) - 1:
+                products_in_card[cart[i]] = counter
+                break
+
+            if cart[i] == cart[i + 1]:
+                counter = counter + 1
+
+            else:
+                products_in_card[cart[i]] = counter
+                counter = 1
+
+    cart_full = ShoppingCard()
+    for key in products_in_card:
+        product_id = key
+        if product_id != "" and product_id != " ":
+            quantity = products_in_card[product_id]
+            print(quantity)
+
+            product = Products.query.get_or_404(product_id)
+            print("Price :")
+            print(product.price)
+
+            item_card = Item(product, quantity)
+            print(item_card.to_string())
+            item_card.get_item_total_price()
+            cart_full.additem(item_card)
+
+    total = cart_full.count_card_total()
+    alv = total * 0.24
+    alv = float('{:.2f}'.format(alv))
+
+    print("pay!!!!\n")
+    id = session['user_id']
+    name = request.form['firstName']
+    lastname = request.form['lastName']
+    email = request.form['email']
+    phone = request.form['phone']
+    billing_address = request.form['address']
+    billing_address2 = request.form['address2']
+    billing_city = request.form['country']
+    billing_zip_code = request.form['zip']
+    shipping_address = request.form['shipping_address']
+    shipping_address2 = request.form['shipping_address2']
+    shipping_city = request.form['shipping_city']
+    shipping_zip = request.form['shipping_zip']
+    name = name + " " + lastname
+    billing_address = billing_address + ', ' + billing_address2
+    numberid = session['user_id']
+    order_date = datetime.utcnow()
+
+    for key in products_in_card:
+        product_id = key
+        if product_id != "" and product_id != " ":
+            quantity = products_in_card[product_id]
+            product = Products.query.get_or_404(product_id)
+            price = product.price * quantity
+            orderitem = OrderItems(order_id=order_id, product_id=product_id, quantity=quantity, price=price,
+                                   updatetime=order_date)
+            try:
+                db.session.add(orderitem)
+                db.session.commit()
+
+
+            except:
+                print("При добавлении списка товаров произошла ошибка")
+
+                return "При добавлении списка товаров произошла ошибка"
+
+    print(numberid)
+    user: Users = Users.query.get_or_404(numberid)
+    password = user.password
+    user.phone = phone
+    user.billing_address=billing_address
+    user.billing_city = billing_city
+    user.billing_zip_code = billing_zip_code
+
+
+
+
+    order = Orders(order_id=order_id, customer_id=numberid, status="accepted", payment="paid",
+                   shipping_address=shipping_address, shipping_city=shipping_city, shipping_zip_code=shipping_zip,
+                   order_date=order_date)
+    payment = Payments(order_id=order_id, customer_id=numberid, order_total = total, order_alv = alv, payment_status = "Paid", updatetime = order_date )
+
+
+    try:
+        db.session.commit()
+        db.session.add(order)
+        db.session.add(payment)
+        db.session.commit()
+        session['user_cart'] = ""
+        return redirect('/thankorder')
+
+    except:
+        print("При добавлении товара произошла ошибка")
+
+        return "При добавлении товара произошла ошибка"
+        render_template("ordermistake.html")
+
+@app.route('/thankorder')
+def thankorder():
+    dictionary = Localization.return_dictionary(session['user_lang'])
+    return render_template("thankorder.html", dictionary=dictionary)
+
+
+@app.route('/checkout', methods=["POST", "GET"])
+def checkout():
+    dictionary = Localization.return_dictionary(session['user_lang'])
+    if 'user_id' in session:
+        user_id = session['user_id']
+    else:
+        return render_template("pleaseregister.html", dictionary=dictionary)
 
     if not session['user_cart']:
         return render_template("shoppingcardempty.html", dictionary=dictionary)
@@ -542,48 +681,9 @@ def checkout():
         alv = total*0.24
         alv = float('{:.2f}'.format(alv))
 
-    if request.method == "POST":
 
-        name = request.form['firstName']
-        lastname = request.form['lastName']
-        email = request.form['email']
-        phone = request.form['phone']
-        billing_address = request.form['address']
-        billing_address2 = request.form['address2']
-        billing_city = request.form['country']
-        billing_zip_code = request.form['zip']
-        shipping_address = request.form['shipping_address']
-        shipping_address2 = request.form['shipping_address2']
-        shipping_city = request.form['shipping_city']
-        shipping_zip = request.form['shipping_zip']
-        name = name + " " + lastname
-        billing_address = billing_address + ', '+billing_address2
-        numberid = session['user_id']
-        order_id = random.randint(100000, 999999)
-        order_date = datetime.utcnow()
 
-        print(numberid)
-        user = Products.query.get_or_404(numberid)
-        password = user.password
 
-        user_update = Users(id=numberid, name=name, email = email, password=password, phone=phone, billing_address=billing_address,
-                            billing_city=billing_city,billing_zip_code = billing_zip_code)
-
-        order = Orders(order_id= order_id, customer_id =  numberid, status = "accepted", payment = "paid",
-                       shipping_address = shipping_address, shipping_city = shipping_city, shipping_zip_code =shipping_zip,
-                       order_date= order_date)
-
-        try:
-            db.session.add(user_update)
-            db.session.commit()
-            db.session.add(order)
-            db.session.commit()
-            return redirect('/')
-
-        except:
-            print("При добавлении товара произошла ошибка")
-
-            return "При добавлении товара произошла ошибка"
     return render_template("checkout.html", cart=cart_full, alv=alv, total=total, dictionary=dictionary)
 
 
@@ -646,6 +746,16 @@ def ordersadmin():
 
     return render_template("ordersadmin.html", orders=orders, dictionary=dictionary)
 
+@app.route('/paymentsadmin')
+def paymentsadmin():
+    dictionary = Localization.return_dictionary(session['user_lang'])
+    payments = Payments.query.all()
+    total = 0
+    totalalv= 0
+    for el in payments:
+        total = total + el.order_total
+        totalalv = totalalv+el.order_alv
+    return render_template("paymentsadmin.html", payments=payments, total = total, totalalv = totalalv, dictionary=dictionary)
 
 @app.route('/productsadmin')
 def productsadmin():
@@ -772,7 +882,7 @@ def updateuseritself(id):
 @app.route('/customersadmin')
 def customerssadmin():
     dictionary = Localization.return_dictionary(session['user_lang'])
-    users = Users.query.all();
+    users = Users.query.all()
 
     return render_template("customersadmin.html", users=users, dictionary=dictionary)
 
