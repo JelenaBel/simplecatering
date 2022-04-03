@@ -5,13 +5,14 @@ Menus
 {% endblock %}
 
 {% block body%}
-    <body>
+
+
        <div class="container px-4 py-5" id="custom-cards">
        <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
       <div class="col">
         <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg" style="background-image: url('/static/images/59.jpg')">
           <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
-            <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold"  >Best catering service for different events</h2>
+            <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold"  >{{ dictionary['main_title1']  }}</h2>
             <ul class="d-flex list-unstyled mt-auto">
               <li class="me-auto">
                 <img   width="32" height="32" class="rounded-circle border border-white">
@@ -32,7 +33,7 @@ Menus
       <div class="col">
         <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg" style="background-image: url('/static/images/58.jpg');">
           <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
-            <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold" >Only best ingredients from chosen suppliers</h2>
+            <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold" >{{ dictionary['main_title2']  }}</h2>
             <ul class="d-flex list-unstyled mt-auto">
               <li class="me-auto">
                 <img width="32" height="32" class="rounded-circle border border-white">
@@ -53,73 +54,75 @@ Menus
       <div class="col">
         <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg" style="background-image: url('/static/images/57.jpg');">
           <div class="d-flex flex-column h-100 p-5 pb-3 text-shadow-1">
-            <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">We are offering big choice of ready made menus</h2>
+            <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">{{ dictionary['main_title3']  }}</h2>
 
           </div>
         </div>
       </div>
        </div>
        </div>
+
+    <body>
  <div class="b-example-divider"></div>
 
   <div class="container px-4 py-5" id="icon-grid">
-    <h2 class="pb-2 border-bottom">ART Catering</h2>
+    <h2 class="pb-2 border-bottom">{{ dictionary['main_title']  }}</h2>
 
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-5">
       <div class="col d-flex align-items-start">
         <svg class="bi text-muted flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#bootstrap"/></svg>
         <div>
-          <h4 class="fw-bold mb-0">Our services</h4>
-          <p>We are serving all types of events. Table service, buffet, standing buffet</p>
+          <h4 class="fw-bold mb-0">{{ dictionary['main_subtitle1']  }}</h4>
+          <p>{{ dictionary['main_text1']  }}</p>
         </div>
       </div>
       <div class="col d-flex align-items-start">
         <svg class="bi text-muted flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#cpu-fill"/></svg>
         <div>
-          <h4 class="fw-bold mb-0">Menus</h4>
-          <p>We are offering wide range of ready made menus with different price</p>
+          <h4 class="fw-bold mb-0">{{ dictionary['main_subtitle2']  }}</h4>
+          <p>{{ dictionary['main_text2']  }}</p>
         </div>
       </div>
       <div class="col d-flex align-items-start">
         <svg class="bi text-muted flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#calendar3"/></svg>
         <div>
-          <h4 class="fw-bold mb-0">Create menu</h4>
-          <p>You can create your own menu from our dishes in our create section</p>
+          <h4 class="fw-bold mb-0">{{ dictionary['main_subtitle3']  }}</h4>
+          <p>{{ dictionary['main_text3']  }}</p>
         </div>
       </div>
       <div class="col d-flex align-items-start">
         <svg class="bi text-muted flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#home"/></svg>
         <div>
-          <h4 class="fw-bold mb-0">Best ingredients</h4>
-          <p>We are using only best ingredients from chosen food suppliers</p>
+          <h4 class="fw-bold mb-0">{{ dictionary['main_subtitle4']  }}</h4>
+          <p>{{ dictionary['main_text4']  }}</p>
         </div>
       </div>
       <div class="col d-flex align-items-start">
         <svg class="bi text-muted flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#speedometer2"/></svg>
         <div>
-          <h4 class="fw-bold mb-0">Private events</h4>
-          <p>Weddings, birthdays, parties, children birthdays. </p>
+          <h4 class="fw-bold mb-0">{{ dictionary['main_subtitle5']  }}</h4>
+          <p>{{ dictionary['main_text5']  }}</p>
         </div>
       </div>
       <div class="col d-flex align-items-start">
         <svg class="bi text-muted flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#toggles2"/></svg>
         <div>
-          <h4 class="fw-bold mb-0">Corporate events</h4>
-          <p>We are serving all type of corporate events from small scale up to 500 persons</p>
+          <h4 class="fw-bold mb-0">{{ dictionary['main_subtitle6']  }}</h4>
+          <p>{{ dictionary['main_text6']  }}</p>
         </div>
       </div>
       <div class="col d-flex align-items-start">
         <svg class="bi text-muted flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#geo-fill"/></svg>
         <div>
-          <h4 class="fw-bold mb-0">Waitress service</h4>
-          <p>We are offering our waitress service in case you need it </p>
+          <h4 class="fw-bold mb-0">{{ dictionary['main_subtitle7']  }}</h4>
+          <p>{{ dictionary['main_text7']  }}</p>
         </div>
       </div>
       <div class="col d-flex align-items-start">
         <svg class="bi text-muted flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#tools"/></svg>
         <div>
-          <h4 class="fw-bold mb-0">Delivery</h4>
-          <p>We are serving events in Helsinki, Espoo, Vantaa, Kauniainen, Tuusula, Kerävä ja Järvenpää</p>
+          <h4 class="fw-bold mb-0">{{ dictionary['main_subtitle8']  }}</h4>
+          <p>{{ dictionary['main_text8']  }}</p>
         </div>
       </div>
     </div>

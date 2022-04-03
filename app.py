@@ -43,8 +43,27 @@ class Localization:
         'signin_button': 'Sign-in',
         'signin_smalltext1': 'By clicking Sign up, you agree to the terms of use.',
         'signin_smalltext2': "Don't have an account? ",
-        'signin_smalltext3': "Register here."
-
+        'signin_smalltext3': "Register here.",
+        'main_title1': 'Best catering service for different events',
+        'main_title2': 'Only best ingredients from chosen suppliers',
+        'main_title3': 'We are offering big choice of ready made menus',
+        'main_title': 'ART Catering',
+        'main_subtitle1': 'Our services',
+        'main_subtitle2': "Menus",
+        'main_subtitle3': "Create menu",
+        'main_subtitle4': 'Best ingredients',
+        'main_subtitle5': "Private events",
+        'main_subtitle6': "Corporate events",
+        'main_subtitle7': 'Waitress service',
+        'main_subtitle8': "Delivery",
+        'main_text1': 'We are serving all types of events. Table service, buffet, standing buffet',
+        'main_text2': "We are offering wide range of ready made menus with different price",
+        'main_text3': "You can create your own menu from our dishes in our create section",
+        'main_text4': 'We are using only best ingredients from chosen food suppliers',
+        'main_text5': "Weddings, birthdays, parties, children birthdays.",
+        'main_text6': "We are serving all type of corporate events from small scale up to 500 persons",
+        'main_text7': 'We are offering our waitress service in case you need it',
+        'main_text8': "We are serving events in Helsinki, Espoo, Vantaa, Kauniainen, Tuusula, Kerävä ja Järvenpää",
 
     }
 
@@ -64,7 +83,27 @@ class Localization:
         'signin_button': 'Kirjaudu',
         'signin_smalltext1': 'Klikkaamalla Rekisteröidy hyväksyt käyttöehdot.',
         'signin_smalltext2': 'Eikö sinulla ole tiliä? ',
-        'signin_smalltext3': 'Rekisteröidy täällä.'
+        'signin_smalltext3': 'Rekisteröidy täällä.',
+        'main_title1': 'Paras catering-palvelu erilaisiin tapahtumiin',
+        'main_title2': 'Vain parhaat ainesosat valituilta toimittajilta',
+        'main_title3': 'Tarjoamme laajan valikoiman valmiita ruokalistoja',
+        'main_title': 'ART Catering',
+        'main_subtitle1': 'Palvelumme',
+        'main_subtitle2': "Menut",
+        'main_subtitle3': "Luo valikko",
+        'main_subtitle4': 'Parhaat ainesosat',
+        'main_subtitle5': "Yksityiset tapahtumat",
+        'main_subtitle6': "Yritystapahtumat",
+        'main_subtitle7': 'Tarjoilijapalvelu',
+        'main_subtitle8': "Toimitus",
+        'main_text1': 'Palvelemme kaikenlaisia tapahtumia. Pöytätarjoilu, buffet, seisova buffet',
+        'main_text2': "Tarjoamme laajan valikoiman valmiita menuja eri hinnoilla",
+        'main_text3': "Voit luoda oman ruokalistasi meidän luomisosiossa",
+        'main_text4': 'Käytämme vain parhaita raaka-aineita valituilta elintarviketoimittajilta',
+        'main_text5': "Häät, syntymäpäivät, juhlat, lasten syntymäpäivät.",
+        'main_text6': "Palvelemme kaikenlaisia ​​yritystilaisuuksia pienestä 500 hengelle asti",
+        'main_text7': 'Tarjoamme tarjoilijapalveluamme, jos tarvitset sitä',
+        'main_text8': "Palvelemme tapahtumia Helsingissä, Espoossa, Vantaalla, Kauniaisissa, Tuusulassa, Kerävällä ja Järvenpäällä",
 
     }
 
