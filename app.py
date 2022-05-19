@@ -8,7 +8,7 @@ import os
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://hbbtcbxjsxpdiy:844964e92513a99fca5ebbf2d5cf3905168fd7fe11b4ad4687506226cbbeeb2f@ec2-99-80-170-190.eu-west-1.compute.amazonaws.com:5432/dcec454i81m15f'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://klmedatmzjfmmj:d8ce399ff60337fccda056b4ccd41c17931db910a70bb250b5083ffc6a9fb301@ec2-3-248-121-12.eu-west-1.compute.amazonaws.com:5432/d3gljugtickhlg'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
