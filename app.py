@@ -8,12 +8,11 @@ import os
 
 
 app = Flask(__name__)
-<<<<<<< HEAD
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://oyicnymisbwvmr:98f76173ebf06900a7c721a068c6ca7f4bfedd2b61b2cf0c42f36b621bcc3939@ec2-54-228-125-183.eu-west-1.compute.amazonaws.com:5432/d73bs3hispaghi'
-=======
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://eeuzriffynpqbr:2ef7105394bbd7718481f60610ad08e34102dfb788a2e4eae28c146a1f709cc1@ec2-52-212-228-71.eu-west-1.compute.amazonaws.com:5432/do2o14ddf5b9v'
 
->>>>>>> origin/main
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://oyicnymisbwvmr:98f76173ebf06900a7c721a068c6ca7f4bfedd2b61b2cf0c42f36b621bcc3939@ec2-54-228-125-183.eu-west-1.compute.amazonaws.com:5432/d73bs3hispaghi'
+
+
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 db.create_all()
