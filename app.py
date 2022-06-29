@@ -18,7 +18,7 @@ app.config['SECRET_KEY'] = 'zybrzubryachestiy'
 UPLOAD_FOLDER = 'static/images'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-app.config['MAIL_SERVER'] = 'smtp.yahoo.com'
+app.config['MAIL_SERVER'] = 'smtp.mail.yahoo.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USERNAME'] = 'taide.catering@yahoo.com'
 app.config['MAIL_PASSWORD'] = 'Kokoshnik45'
