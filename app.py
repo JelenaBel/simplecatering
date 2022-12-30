@@ -9,7 +9,8 @@ import os
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://igajyfvrtxehql:24d189e4736bcb4a278859e7a52a3a36e468a7e3c95b6ffbaa56f2d0679efb75@ec2-99-81-16-126.eu-west-1.compute.amazonaws.com:5432/d9frrtbk7bh06q'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///catering.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://igajyfvrtxehql:24d189e4736bcb4a278859e7a52a3a36e468a7e3c95b6ffbaa56f2d0679efb75@ec2-99-81-16-126.eu-west-1.compute.amazonaws.com:5432/d9frrtbk7bh06q'
 # this is new database
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
